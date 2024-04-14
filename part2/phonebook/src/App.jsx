@@ -1,19 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputForm from "./components/InputForm";
 import NumbersList from "./components/NumbersList";
 import SearchField from "./components/SearchField";
+import axios from "axios";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "678-999-8212" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [personFilter, setPersonFilter] = useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
 
   const filteredPersons =
     personFilter === ""
       ? persons
       : persons.filter((person) =>
-          person.name.toLowerCase().startsWith(personFilter.toLowerCase())
+          person.name.toLowerCase().includes(personFilter.toLowerCase())
         );
 
   const onSearchChange = (searchTerm) => {
