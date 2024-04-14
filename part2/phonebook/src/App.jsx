@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import InputForm from "./components/InputForm";
 import NumbersList from "./components/NumbersList";
 import SearchField from "./components/SearchField";
-import axios from "axios";
+import peopleService from "./services/people";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [personFilter, setPersonFilter] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    peopleService.getAll().then((data) => {
+      setPersons(data);
     });
   }, []);
 
@@ -26,11 +26,35 @@ const App = () => {
   };
 
   const onNewPerson = (newPerson) => {
-    if (persons.some((person) => person.name === newPerson.name)) {
-      alert(`${newPerson.name} is already added to the phonebook`);
+    const existingPerson = persons.find(
+      (person) => person.name === newPerson.name
+    );
+    if (existingPerson !== undefined) {
+      const updatedPerson = { ...existingPerson, number: newPerson.number };
+      peopleService.update(existingPerson.id, updatedPerson).then((data) => {
+        setPersons(
+          persons.map((person) => {
+            if (person.id === data.id) {
+              return data;
+            } else {
+              return person;
+            }
+          })
+        );
+      });
     } else {
-      setPersons(persons.concat(newPerson));
+      peopleService.create(newPerson).then((data) => {
+        setPersons(persons.concat(data));
+      });
     }
+  };
+
+  const onDeletePerson = (id) => {
+    peopleService.remove(id).then((data) => {
+      console.log(data);
+      console.log(persons.filter((person) => person.id !== data.id));
+      setPersons(persons.filter((person) => person.id !== data.id));
+    });
   };
 
   return (
@@ -38,7 +62,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <SearchField onSearchChange={onSearchChange} />
       <InputForm onNewPerson={onNewPerson} />
-      <NumbersList persons={filteredPersons} />
+      <NumbersList persons={filteredPersons} onDelete={onDeletePerson} />
     </div>
   );
 };
