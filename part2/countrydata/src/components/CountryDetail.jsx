@@ -1,4 +1,6 @@
+import { useState, useEffect, useCallback } from "react";
 import "../App.css";
+import weatherService from "../services/weather";
 
 const CountryDetail = ({ country }) => {
   return (
@@ -14,6 +16,34 @@ const CountryDetail = ({ country }) => {
       </ul>
       <h4>Flag</h4>
       <img src={country.flags.svg} className="country-flag-img" />
+      <CountryWeather
+        capital={country.capital[0]}
+        lat={country.capitalInfo.latlng[0]}
+        lon={country.capitalInfo.latlng[1]}
+      />
+    </>
+  );
+};
+
+const CountryWeather = ({ capital, lat, lon }) => {
+  const [weatherData, setWeatherData] = useState(null);
+
+  useEffect(() => {
+    weatherService.getCurrentWeather(lat, lon).then((data) => {
+      setWeatherData(data);
+    });
+  }, [lat, lon]);
+
+  if (weatherData === null) {
+    return null;
+  }
+
+  return (
+    <>
+      <h4>Weather in {capital}</h4>
+      <img src={weatherService.iconURL(weatherData.weather[0].icon)} />
+      <div>Temperature: {weatherData.main.temp}° Fahrenheit</div>
+      <div>Wind speed: {weatherData.wind.speed} mph</div>
     </>
   );
 };
