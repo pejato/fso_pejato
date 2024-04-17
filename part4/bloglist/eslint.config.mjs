@@ -4,6 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
 import pluginJs from '@eslint/js';
+import eslintConfigPrettier from "eslint-config-prettier";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
 // mimic CommonJS variables -- not needed if using CommonJS
 const __filename = fileURLToPath(import.meta.url);
@@ -17,5 +19,7 @@ export default [
   { files: ['**/*.js'], languageOptions: { sourceType: 'commonjs' } },
   { languageOptions: { globals: globals.browser } },
   ...compat.extends('airbnb-base'),
-  { rules: { 'operator-linebreak': 'off' } },
+  // { rules: { 'operator-linebreak': 'off' } },
+  eslintPluginPrettierRecommended,
+  eslintConfigPrettier,
 ];
