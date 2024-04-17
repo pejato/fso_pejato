@@ -8,7 +8,7 @@ const testHelper = require('./blogs_test_helper');
 
 const api = supertest(app);
 
-describe('blogs controller', () => {
+describe('when there are blogs in the database', () => {
   // MARK: - Tests
 
   test('response is in JSON format', async () => {
@@ -24,54 +24,129 @@ describe('blogs controller', () => {
   });
 
   test('blog has id', async () => {
-    const response = await api.get(`/api/blogs`);
-    const blogIds = response.body.map((b) => b.id);
+    const blogs = await testHelper.blogsInDb();
+    const blogIds = blogs.map((b) => b.id);
 
     for (let i = 0; i < blogIds.length; i += 1) {
       assert(blogIds[i]);
     }
   });
 
-  test('a valid blog can be added', async () => {
-    const blog = new Blog({
-      author: 'foo',
-      title: 'bar',
-      url: 'google.com',
-      likes: 75,
+  test('blogs can be fetched by id', async () => {
+    const blogs = await testHelper.blogsInDb();
+    const blogId = blogs[0].id;
+    const blogResponse = await api.get(`/api/blogs/${blogId}`);
+    assert.deepStrictEqual(blogs[0], blogResponse.body);
+  });
+
+  describe('adding a blog', () => {
+    test('that is valid returns 201 and the blog', async () => {
+      const blog = {
+        author: 'foo',
+        title: 'bar',
+        url: 'google.com',
+        likes: 75,
+      };
+      await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
+      const blogsInDb = await testHelper.blogsInDb();
+      assert.strictEqual(blogsInDb.length, 3);
     });
-    await api
-      .post('/api/blogs')
-      .send(blog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
-    const notesInDb = await testHelper.notesInDb();
-    assert.strictEqual(notesInDb.length, 3);
+
+    test('without likes defaults to zero likes', async () => {
+      const blog = {
+        author: 'foo',
+        title: 'bar',
+        url: 'google.com',
+      };
+      const savedBlog = await api.post('/api/blogs').send(blog).expect(201);
+      assert.strictEqual(savedBlog.body.likes, 0);
+    });
+
+    test('without title returns 400', async () => {
+      const blog = {
+        author: 'foo',
+        url: 'google.com',
+      };
+      await api.post('/api/blogs').send(blog).expect(400);
+    });
+
+    test('without url returns 400', async () => {
+      const blog = {
+        author: 'foo',
+        title: 'baz',
+      };
+      await api.post('/api/blogs').send(blog).expect(400);
+    });
   });
 
-  test('adding a blog without likes defaults to zero likes', async () => {
-    const blog = {
-      author: 'foo',
-      title: 'bar',
-      url: 'google.com',
-    };
-    const savedBlog = await api.post('/api/blogs').send(blog).expect(201);
-    assert.strictEqual(savedBlog.body.likes, 0);
+  describe('deleting a blog', () => {
+    test('returns 204', async () => {
+      const blogs = await testHelper.blogsInDb();
+      const blogId = blogs[0].id;
+      await api.delete(`/api/blogs/${blogId}`).expect(204);
+      const blogsWithDeletion = await testHelper.blogsInDb();
+      for (let i = 0; i < blogsWithDeletion.length; i += 1) {
+        assert.notStrictEqual(blogsWithDeletion[i].id, blogId);
+      }
+    });
   });
 
-  test('adding a blog without title returns 400', async () => {
-    const blog = {
-      author: 'foo',
-      url: 'google.com',
-    };
-    await api.post('/api/blogs').send(blog).expect(400);
+  describe('modifying a blog', () => {
+    test('with valid fields returns 200 and the updated blog', async () => {
+      const blogs = await testHelper.blogsInDb();
+      const blogId = blogs[0].id;
+      const update = {
+        title: 'Glorious new title',
+      };
+      const response = await api
+        .patch(`/api/blogs/${blogId}`)
+        .send(update)
+        .expect(200);
+
+      const updatedBlog = response.body;
+      assert.strictEqual(updatedBlog.title, update.title);
+      const updatedBlogs = await testHelper.blogsInDb();
+      assert.strictEqual(updatedBlogs[0].title, update.title);
+    });
+
+    test('with an invalid field returns 400', async () => {
+      const blogs = await testHelper.blogsInDb();
+      const blogId = blogs[0].id;
+      const update = {
+        title: 'Glorious new title',
+        let_me_add_a_field_pls: 9001,
+      };
+      await api.patch(`/api/blogs/${blogId}`).send(update).expect(400);
+      const updatedBlogs = await testHelper.blogsInDb();
+      assert.deepStrictEqual(updatedBlogs, blogs);
+    });
   });
 
-  test('adding a blog without url returns 400', async () => {
-    const blog = {
-      author: 'foo',
-      title: 'baz',
-    };
-    await api.post('/api/blogs').send(blog).expect(400);
+  describe('replacing a blog', () => {
+    test('returns a 200 and the updated blog', async () => {
+      const blogs = await testHelper.blogsInDb();
+      const blogId = blogs[0].id;
+      const update = {
+        title: 'Glorious new title',
+        author: 'mine now',
+        url: 'google.com',
+        likes: 2000,
+      };
+      const response = await api
+        .put(`/api/blogs/${blogId}`)
+        .send(update)
+        .expect(200);
+
+      const updatedBlog = response.body;
+      assert.strictEqual(updatedBlog.title, update.title);
+      assert.strictEqual(updatedBlog.author, update.author);
+      assert.strictEqual(updatedBlog.url, update.url);
+      assert.strictEqual(updatedBlog.likes, update.likes);
+    });
   });
 
   // MARK: - Setup & Teardown

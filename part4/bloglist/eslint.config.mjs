@@ -22,4 +22,9 @@ export default [
   // { rules: { 'operator-linebreak': 'off' } },
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,
+  {
+    rules: {
+      'no-restricted-syntax': 'off'
+    }
+  }
 ];
