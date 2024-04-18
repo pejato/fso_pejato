@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const Blog = require('../models/blog');
-const User = require('../models/user');
 
 const userPopConfig = { username: 1, name: 1 };
 
@@ -26,11 +25,7 @@ router.post('/', async (request, response) => {
     return response.status(400).end();
   }
 
-  if (!request.token || !request.token.id) {
-    return response.status(401).json({ error: 'token invalid' });
-  }
-
-  const user = await User.findById(request.token.id);
+  const { user } = request;
   const blog = new Blog({ user: user._id, ...request.body });
 
   const savedBlog = await blog.save();
@@ -44,11 +39,8 @@ router.post('/', async (request, response) => {
 // MARK: - DELETE
 
 router.delete('/:id', async (request, response) => {
-  if (!request.token || !request.token.id) {
-    return response.status(401).json({ error: 'token invalid' });
-  }
   const blog = await Blog.findById(request.params.id);
-  const user = await User.findById(request.token.id);
+  const { user } = request;
 
   if (user._id.toString() !== blog.user.toString()) {
     return response.status(401).json({ error: 'token invalid' });
