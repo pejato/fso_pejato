@@ -95,6 +95,28 @@ describe('when there are blogs in the database', () => {
         .send(blog)
         .expect(400);
     });
+
+    test('without token returns 401', async () => {
+      const blog = {
+        author: 'foo',
+        title: 'baz',
+      };
+      const response = await api.post('/api/blogs').send(blog).expect(401);
+      assert.deepStrictEqual(response.body, { error: 'invalid token' });
+    });
+
+    test('with an invalid token returns 401', async () => {
+      const blog = {
+        author: 'foo',
+        title: 'baz',
+      };
+      const response = await api
+        .post('/api/blogs')
+        .set('Authorization', `${testHelper.testAuthValue}&`)
+        .send(blog)
+        .expect(401);
+      assert.deepStrictEqual(response.body, { error: 'invalid token' });
+    });
   });
 
   describe('deleting a blog', () => {

@@ -44,7 +44,7 @@ router.post('/', async (request, response) => {
 router.delete('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id);
   if (request.user._id.toString() !== blog.user.toString()) {
-    return response.status(401).json({ error: 'token invalid' });
+    return response.status(401).json({ error: 'invalid token' });
   }
 
   await blog.deleteOne();
