@@ -9,6 +9,17 @@ router.get('/', async (request, response) => {
 
 router.post('/', async (request, response) => {
   const { username, name, password } = request.body;
+  if (!username || username.length < 3) {
+    return response
+      .status(400)
+      .json({ error: 'username must be at least 3 characters' });
+  }
+  if (!password || password.length < 3) {
+    return response
+      .status(400)
+      .json({ error: 'password must be at least 3 characters' });
+  }
+
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
@@ -20,7 +31,7 @@ router.post('/', async (request, response) => {
 
   const savedUser = await user.save();
 
-  response.status(201).json(savedUser);
+  return response.status(201).json(savedUser);
 });
 
 module.exports = router;
