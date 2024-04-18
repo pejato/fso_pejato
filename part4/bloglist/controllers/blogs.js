@@ -4,6 +4,8 @@ const User = require('../models/user');
 
 const userPopConfig = { username: 1, name: 1 };
 
+// MARK: - GET
+
 router.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', userPopConfig);
   response.json(blogs);
@@ -14,6 +16,8 @@ router.get('/:id', async (request, response) => {
   response.json(blog);
 });
 
+// MARK: - POST
+
 router.post('/', async (request, response) => {
   if (!request.body.title) {
     return response.status(400).end();
@@ -22,7 +26,7 @@ router.post('/', async (request, response) => {
     return response.status(400).end();
   }
 
-  if (!request.token.id) {
+  if (!request.token || !request.token.id) {
     return response.status(401).json({ error: 'token invalid' });
   }
 
@@ -37,10 +41,24 @@ router.post('/', async (request, response) => {
     .json(await savedBlog.populate('user', userPopConfig));
 });
 
+// MARK: - DELETE
+
 router.delete('/:id', async (request, response) => {
-  await Blog.deleteOne({ _id: request.params.id });
-  response.status(204).end();
+  if (!request.token || !request.token.id) {
+    return response.status(401).json({ error: 'token invalid' });
+  }
+  const blog = await Blog.findById(request.params.id);
+  const user = await User.findById(request.token.id);
+
+  if (user._id.toString() !== blog.user.toString()) {
+    return response.status(401).json({ error: 'token invalid' });
+  }
+
+  await blog.deleteOne();
+  return response.status(204).end();
 });
+
+// MARK: - PATCH
 
 router.patch('/:id', async (request, response) => {
   const schemaKeys = Blog.schema.paths;
@@ -54,6 +72,8 @@ router.patch('/:id', async (request, response) => {
   });
   return response.json(result);
 });
+
+// MARK: - PUT
 
 router.put('/:id', async (request, response) => {
   const update = {
