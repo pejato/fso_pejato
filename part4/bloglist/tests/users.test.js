@@ -2,7 +2,6 @@ const assert = require('assert');
 const { describe, test, beforeEach, after } = require('node:test');
 const supertest = require('supertest');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const api = require('../app');
 const User = require('../models/user');
 const testHelper = require('./api_test_helper');

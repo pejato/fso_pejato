@@ -11,7 +11,10 @@ router.get('/', async (request, response) => {
 });
 
 router.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id);
+  const blog = await Blog.findById(request.params.id).populate(
+    'user',
+    userPopConfig,
+  );
   response.json(blog);
 });
 
@@ -40,9 +43,7 @@ router.post('/', async (request, response) => {
 
 router.delete('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id);
-  const { user } = request;
-
-  if (user._id.toString() !== blog.user.toString()) {
+  if (request.user._id.toString() !== blog.user.toString()) {
     return response.status(401).json({ error: 'token invalid' });
   }
 

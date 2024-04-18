@@ -20,9 +20,9 @@ mongoose.connect(MONGODB_URI);
 app.use(cors());
 app.use(express.json());
 app.post('/api/blogs', [tokenExtractor, userExtractor]);
-app.delete('/api/blogs', [tokenExtractor, userExtractor]);
-app.put('/api/blogs', [tokenExtractor, userExtractor]);
-app.patch('/api/blogs', [tokenExtractor, userExtractor]);
+app.delete('/api/blogs/:id', [tokenExtractor, userExtractor]);
+app.put('/api/blogs/:id', [tokenExtractor, userExtractor]);
+app.patch('/api/blogs/:id', [tokenExtractor, userExtractor]);
 
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);

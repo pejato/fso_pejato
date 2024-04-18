@@ -60,7 +60,11 @@ const userExtractor = async (request, response, next) => {
   if (!request.token || !request.token.id) {
     return next();
   }
-  request.user = await User.findById(request.token.id);
+  try {
+    request.user = await User.findById(request.token.id);
+  } catch (error) {
+    return next(error);
+  }
   if (!request.user) {
     return response.status(401).json({ error: 'invalid token' });
   }

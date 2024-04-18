@@ -4,6 +4,7 @@ const supertest = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 const testHelper = require('./api_test_helper');
 
 const api = supertest(app);
@@ -49,6 +50,7 @@ describe('when there are blogs in the database', () => {
       };
       await api
         .post('/api/blogs')
+        .set('Authorization', testHelper.testAuthValue)
         .send(blog)
         .expect(201)
         .expect('Content-Type', /application\/json/);
@@ -62,7 +64,11 @@ describe('when there are blogs in the database', () => {
         title: 'bar',
         url: 'google.com',
       };
-      const savedBlog = await api.post('/api/blogs').send(blog).expect(201);
+      const savedBlog = await api
+        .post('/api/blogs')
+        .set('Authorization', testHelper.testAuthValue)
+        .send(blog)
+        .expect(201);
       assert.strictEqual(savedBlog.body.likes, 0);
     });
 
@@ -71,7 +77,11 @@ describe('when there are blogs in the database', () => {
         author: 'foo',
         url: 'google.com',
       };
-      await api.post('/api/blogs').send(blog).expect(400);
+      await api
+        .post('/api/blogs')
+        .set('Authorization', testHelper.testAuthValue)
+        .send(blog)
+        .expect(400);
     });
 
     test('without url returns 400', async () => {
@@ -79,7 +89,11 @@ describe('when there are blogs in the database', () => {
         author: 'foo',
         title: 'baz',
       };
-      await api.post('/api/blogs').send(blog).expect(400);
+      await api
+        .post('/api/blogs')
+        .set('Authorization', testHelper.testAuthValue)
+        .send(blog)
+        .expect(400);
     });
   });
 
@@ -87,7 +101,10 @@ describe('when there are blogs in the database', () => {
     test('returns 204', async () => {
       const blogs = await testHelper.blogsInDb();
       const blogId = blogs[0].id;
-      await api.delete(`/api/blogs/${blogId}`).expect(204);
+      await api
+        .delete(`/api/blogs/${blogId}`)
+        .set('Authorization', testHelper.testAuthValue)
+        .expect(204);
       const blogsWithDeletion = await testHelper.blogsInDb();
       for (let i = 0; i < blogsWithDeletion.length; i += 1) {
         assert.notStrictEqual(blogsWithDeletion[i].id, blogId);
@@ -104,6 +121,7 @@ describe('when there are blogs in the database', () => {
       };
       const response = await api
         .patch(`/api/blogs/${blogId}`)
+        .set('Authorization', testHelper.testAuthValue)
         .send(update)
         .expect(200);
 
@@ -120,7 +138,11 @@ describe('when there are blogs in the database', () => {
         title: 'Glorious new title',
         let_me_add_a_field_pls: 9001,
       };
-      await api.patch(`/api/blogs/${blogId}`).send(update).expect(400);
+      await await api
+        .patch(`/api/blogs/${blogId}`)
+        .set('Authorization', testHelper.testAuthValue)
+        .send(update)
+        .expect(400);
       const updatedBlogs = await testHelper.blogsInDb();
       assert.deepStrictEqual(updatedBlogs, blogs);
     });
@@ -138,6 +160,7 @@ describe('when there are blogs in the database', () => {
       };
       const response = await api
         .put(`/api/blogs/${blogId}`)
+        .set('Authorization', testHelper.testAuthValue)
         .send(update)
         .expect(200);
 
@@ -153,8 +176,11 @@ describe('when there are blogs in the database', () => {
 
   beforeEach(async () => {
     await Blog.deleteMany({});
+    await User.deleteMany({});
     const blogs = testHelper.initialBlogs.map((b) => new Blog(b));
+    const users = testHelper.initialUsers.map((u) => new User(u));
     await Promise.all(blogs.map((b) => b.save()));
+    await Promise.all(users.map((u) => u.save()));
   });
 
   after(async () => {
