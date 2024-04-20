@@ -1,4 +1,4 @@
-import { useState, useEffect, React, useCallback } from 'react';
+import { useState, useEffect, React, useCallback, useRef } from 'react';
 import blogService from './services/blogs';
 import LoginPage from './components/LoginPage';
 import BlogList from './components/BlogList';
@@ -8,6 +8,7 @@ import LoggedInHeader from './components/LoggedInHeader';
 import Notification from './components/Notification';
 import CreateBlogForm from './components/CreateBlogForm';
 import CreateNotificationContext from './contexts/CreateNotificationContext';
+import Togglable from './components/Togglable';
 
 function App() {
   const [blogs, setBlogs] = useState([]);
@@ -15,6 +16,7 @@ function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [notificationInfo, setNotificationInfo] = useState(null);
+  const blogFormRef = useRef();
 
   const createNotification = useCallback((notification) => {
     setNotificationInfo(notification);
@@ -59,6 +61,7 @@ function App() {
     }
   };
   const onCreatedBlog = (blog) => {
+    blogFormRef.current.toggleVisibility();
     setBlogs(blogs.concat(blog));
   };
   const content =
@@ -74,7 +77,9 @@ function App() {
       <>
         <h2>Blogs</h2>
         <LoggedInHeader setUser={setUser} user={user} />
-        <CreateBlogForm onCreatedBlog={onCreatedBlog} />
+        <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+          <CreateBlogForm onCreatedBlog={onCreatedBlog} />
+        </Togglable>
         <BlogList blogs={blogs} />
       </>
     );
