@@ -10,8 +10,9 @@ function LoginForm({
   return (
     <form onSubmit={onSubmit}>
       <div>
-        Username{' '}
+        Username
         <input
+          className="form-input"
           type="text"
           value={username}
           name="Username"
@@ -19,8 +20,9 @@ function LoginForm({
         />
       </div>
       <div>
-        Password{' '}
+        Password
         <input
+          className="form-input"
           type="password"
           value={password}
           name="Password"

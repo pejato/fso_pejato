@@ -4,6 +4,8 @@ import LoginPage from './components/LoginPage';
 import BlogList from './components/BlogList';
 import loginService from './services/login';
 import './App.css';
+import { LoggedInHeader } from './components/LoggedInHeader';
+import CreateBlogForm from './components/CreateBlogForm';
 
 function App() {
   const [blogs, setBlogs] = useState([]);
@@ -24,7 +26,7 @@ function App() {
     }
   }, []);
 
-  const onSubmit = async (event) => {
+  const onLoginSubmit = async (event) => {
     event.preventDefault();
     try {
       const user = await loginService.login({ username, password });
@@ -36,30 +38,22 @@ function App() {
       console.log('Login failed with error', error);
     }
   };
-
+  const onCreatedBlog = (blog) => {
+    setBlogs(blogs.concat(blog));
+  };
   return user === null ? (
     <LoginPage
       username={username}
       password={password}
-      onSubmit={onSubmit}
+      onSubmit={onLoginSubmit}
       onUsernameChange={(e) => setUsername(e.target.value)}
       onPasswordChange={(e) => setPassword(e.target.value)}
     />
   ) : (
     <div>
       <h2>Blogs</h2>
-      <div className="logged-in-label">
-        Logged in as {user.name}{' '}
-        <button
-          type="button"
-          onClick={() => {
-            window.localStorage.removeItem('blogListUser');
-            setUser(null);
-          }}
-        >
-          Log out
-        </button>
-      </div>
+      <LoggedInHeader setUser={setUser} user={user} />
+      <CreateBlogForm onCreatedBlog={onCreatedBlog} />
       <BlogList blogs={blogs} />
     </div>
   );

@@ -10,7 +10,7 @@ function LoginPage({
 }) {
   return (
     <div>
-      <h2>Log in to application</h2>
+      <h2>Log in to Application</h2>
       <LoginForm
         username={username}
         password={password}
