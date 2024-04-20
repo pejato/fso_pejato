@@ -5,9 +5,11 @@ function BlogList({ blogs }) {
   return (
     <div>
       <h2>Created Blogs</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} initialBlog={blog} />
-      ))}
+      {blogs
+        .toSorted((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog key={blog.id} initialBlog={blog} />
+        ))}
     </div>
   );
 }
