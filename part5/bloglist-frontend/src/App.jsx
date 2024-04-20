@@ -3,6 +3,7 @@ import blogService from './services/blogs';
 import LoginPage from './components/LoginPage';
 import BlogList from './components/BlogList';
 import loginService from './services/login';
+import './App.css';
 
 function App() {
   const [blogs, setBlogs] = useState([]);
@@ -45,7 +46,22 @@ function App() {
       onPasswordChange={(e) => setPassword(e.target.value)}
     />
   ) : (
-    <BlogList blogs={blogs} />
+    <div>
+      <h2>Blogs</h2>
+      <div className="logged-in-label">
+        Logged in as {user.name}{' '}
+        <button
+          type="button"
+          onClick={() => {
+            window.localStorage.removeItem('blogListUser');
+            setUser(null);
+          }}
+        >
+          Log out
+        </button>
+      </div>
+      <BlogList blogs={blogs} />
+    </div>
   );
 }
 
