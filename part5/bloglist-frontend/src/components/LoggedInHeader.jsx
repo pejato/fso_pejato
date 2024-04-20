@@ -1,4 +1,6 @@
 import { React } from 'react';
+import PropTypes from 'prop-types';
+import UserType from '../prop-types/User';
 
 function LoggedInHeader({ setUser, user }) {
   return (
@@ -16,5 +18,9 @@ function LoggedInHeader({ setUser, user }) {
     </div>
   );
 }
+LoggedInHeader.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  user: UserType.isRequired,
+};
 
 export default LoggedInHeader;

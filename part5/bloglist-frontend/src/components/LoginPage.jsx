@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import LoginForm from './LoginForm';
 
 function LoginPage({
@@ -21,5 +22,11 @@ function LoginPage({
     </div>
   );
 }
-
+LoginPage.propTypes = {
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onUsernameChange: PropTypes.func.isRequired,
+  onPasswordChange: PropTypes.func.isRequired,
+};
 export default LoginPage;

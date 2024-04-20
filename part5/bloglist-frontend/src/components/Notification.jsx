@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function Notification({ message, isError }) {
   if (!message) {
@@ -17,5 +18,12 @@ function Notification({ message, isError }) {
 
   return <div style={style}>{message}</div>;
 }
-
+Notification.defaultProps = {
+  message: undefined,
+  isError: undefined,
+};
+Notification.propTypes = {
+  message: PropTypes.string,
+  isError: PropTypes.bool,
+};
 export default Notification;

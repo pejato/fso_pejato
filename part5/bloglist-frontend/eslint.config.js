@@ -36,8 +36,8 @@ export default [
       'import/no-named-as-default-member': 'off',
       'import/no-named-as-default': 'off',
       'react/button-has-type': 'off',
-      'react/prop-types': 'off',
       'react/jsx-props-no-spreading': 'off',
+      'react/display-name': 'error',
       'import/no-extraneous-dependencies': [
         'error',
         {

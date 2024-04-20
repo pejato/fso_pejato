@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import CreateNotificationContext from '../contexts/CreateNotificationContext';
 import blogService from '../services/blogs';
+import BlogType from '../prop-types/Blog';
+import UserType from '../prop-types/User';
 
 function Blog({ currentUser, initialBlog, onDeleted }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -90,5 +93,10 @@ function Blog({ currentUser, initialBlog, onDeleted }) {
     </div>
   );
 }
+Blog.propTypes = {
+  currentUser: UserType.isRequired,
+  initialBlog: BlogType.isRequired,
+  onDeleted: PropTypes.func.isRequired,
+};
 
 export default Blog;

@@ -1,5 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Blog from './Blog';
+import UserType from '../prop-types/User';
+import BlogType from '../prop-types/Blog';
 
 function BlogList({ currentUser, blogs, onDeleted }) {
   return (
@@ -18,4 +21,9 @@ function BlogList({ currentUser, blogs, onDeleted }) {
     </div>
   );
 }
+BlogList.propTypes = {
+  currentUser: UserType.isRequired,
+  blogs: PropTypes.arrayOf(BlogType).isRequired,
+  onDeleted: PropTypes.func.isRequired,
+};
 export default BlogList;
