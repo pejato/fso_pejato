@@ -16,7 +16,17 @@ function Blog({ initialBlog }) {
       });
       setBlog(updatedBlog);
     } catch (error) {
-      createNotification({ message: JSON.stringify(error), isError: true });
+      if (error?.response?.data?.error) {
+        createNotification({
+          message: error.response.data.error,
+          isError: true,
+        });
+      } else {
+        createNotification({
+          message: `Failed to like '${blog.title}'`,
+          isError: true,
+        });
+      }
     }
   };
 
