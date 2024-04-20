@@ -26,9 +26,11 @@ function App() {
   }, []);
 
   useEffect(() => {
+    loginService.listenForUnauthenticated(() => setUser(null));
+  });
+  useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
-
   useEffect(() => {
     const userJSONString = window.localStorage.getItem('blogListUser');
     if (userJSONString) {

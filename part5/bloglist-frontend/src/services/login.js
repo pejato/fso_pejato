@@ -16,4 +16,15 @@ const login = async (credentials) => {
   return response.data;
 };
 
-export default { login, token, getToken, setToken };
+const listenForUnauthenticated = (onUnauthed) => {
+  axios.interceptors.response.use(null, (error) => {
+    if (error?.response?.status === 401) {
+      window.localStorage.removeItem('blogListUser');
+      setToken(null);
+      onUnauthed(error);
+    }
+    return Promise.reject(error);
+  });
+};
+
+export default { login, token, getToken, setToken, listenForUnauthenticated };
