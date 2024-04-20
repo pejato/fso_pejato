@@ -22,10 +22,10 @@ router.get('/:id', async (request, response) => {
 
 router.post('/', async (request, response) => {
   if (!request.body.title) {
-    return response.status(400).end();
+    return response.status(400).json({ error: 'Blog must have a title' }).end();
   }
   if (!request.body.url) {
-    return response.status(400).end();
+    return response.status(400).end({ error: 'Blog must have an url' });
   }
 
   const { user } = request;
