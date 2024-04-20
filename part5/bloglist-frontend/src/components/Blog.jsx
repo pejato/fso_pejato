@@ -1,8 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import CreateNotificationContext from '../contexts/CreateNotificationContext';
+import blogService from '../services/blogs';
 
-function Blog({ blog }) {
+function Blog({ initialBlog }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [blog, setBlog] = useState(initialBlog);
+  const createNotification = useContext(CreateNotificationContext);
   const buttonText = isExpanded ? 'Hide' : 'View';
+
+  const onLike = async () => {
+    try {
+      const updatedBlog = await blogService.update({
+        ...blog,
+        likes: blog.likes + 1,
+      });
+      setBlog(updatedBlog);
+    } catch (error) {
+      createNotification({ message: JSON.stringify(error), isError: true });
+    }
+  };
+
   const expandedContent = (
     <>
       <div>
@@ -12,7 +29,9 @@ function Blog({ blog }) {
       </div>
       <div>
         Likes {blog.likes}
-        <button>like</button>
+        <button type="button" onClick={onLike}>
+          like
+        </button>
       </div>
       <div>Uploaded by {blog.user.name}</div>
     </>

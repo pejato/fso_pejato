@@ -62,7 +62,7 @@ router.patch('/:id', async (request, response) => {
   }
   const result = await Blog.findByIdAndUpdate(request.params.id, request.body, {
     new: true,
-  });
+  }).populate('user', userPopConfig);
   return response.json(result);
 });
 
@@ -77,7 +77,7 @@ router.put('/:id', async (request, response) => {
   };
   const result = await Blog.findByIdAndUpdate(request.params.id, update, {
     new: true,
-  });
+  }).populate('user', userPopConfig);
   response.json(result);
 });
 
