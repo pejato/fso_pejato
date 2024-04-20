@@ -28,4 +28,10 @@ const update = (updatedBlog) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create, update };
+const remove = (blog) => {
+  const config = { headers: { ...makeAuthHeader() } };
+  const request = axios.delete(`${baseUrl}/${blog.id}`, config);
+  return request.then((response) => response.data);
+};
+
+export default { getAll, create, update, remove };
