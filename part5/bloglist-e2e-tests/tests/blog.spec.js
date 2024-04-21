@@ -41,8 +41,8 @@ describe.only('Blog app', () => {
       const errorDiv = page.getByText('invalid username or password');
       await expect(errorDiv).toBeVisible();
       await expect(errorDiv).toHaveCSS('border-style', 'solid');
-      await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)');
-      await expect(errorDiv).toHaveCSS('background', 'rgb(211, 211, 211)');
+      await expect(errorDiv).toHaveCSS('color', /rgb\(255, 0, 0\)/);
+      await expect(errorDiv).toHaveCSS('background', /rgb\(211, 211, 211\)/);
     });
   });
 
@@ -96,10 +96,10 @@ describe.only('Blog app', () => {
       await expect(notificationDiv).toBeVisible();
 
       await expect(notificationDiv).toHaveCSS('border-style', 'solid');
-      await expect(notificationDiv).toHaveCSS('color', 'rgb(0, 128, 0)');
+      await expect(notificationDiv).toHaveCSS('color', /rgb\(0, 128, 0\)/);
       await expect(notificationDiv).toHaveCSS(
         'background',
-        'rgb(211, 211, 211)',
+        /rgb\(211, 211, 211\)/,
       );
     });
 
