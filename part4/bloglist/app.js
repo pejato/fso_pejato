@@ -19,6 +19,11 @@ mongoose.connect(MONGODB_URI);
 
 app.use(cors());
 app.use(express.json());
+if (process.env.NODE_ENV === 'test') {
+  // eslint-disable-next-line global-require
+  const testRouter = require('./controllers/testing');
+  app.use('/api/testing', testRouter);
+}
 app.post('/api/blogs', [tokenExtractor, userExtractor]);
 app.delete('/api/blogs/:id', [tokenExtractor, userExtractor]);
 app.put('/api/blogs/:id', [tokenExtractor, userExtractor]);
