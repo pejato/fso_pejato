@@ -61,5 +61,21 @@ describe.only('Blog app', () => {
       await page.getByRole('button', { name: 'Create' }).click();
       await expect(page.getByText('Wyclef Jean by Young Thug')).toBeVisible();
     });
+
+    test('a blog can be liked after creation', async ({ page }) => {
+      await page.getByRole('button', { name: 'Create new blog' }).click();
+      await page.locator('input[name="Author"]').fill('Young Thug');
+      await page.locator('input[name="Title"]').fill('Wyclef Jean');
+      await page
+        .locator('input[name="URL"]')
+        .fill('https://en.wikipedia.org/wiki/Young_Thug');
+      await page.getByRole('button', { name: 'Create' }).click();
+      await page.getByText('Wyclef Jean by Young Thug').waitFor();
+
+      await page.getByRole('button', { name: 'View' }).click();
+      await expect(page.getByText('Likes 0')).toBeVisible();
+      await page.getByRole('button', { name: 'like' }).click();
+      await expect(page.getByText('Likes 1')).toBeVisible();
+    });
   });
 });
