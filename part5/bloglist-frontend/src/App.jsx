@@ -66,6 +66,27 @@ function App() {
     blogFormRef.current.toggleVisibility();
     setBlogs(blogs.concat(blog));
   };
+  const onLike = async (blog) => {
+    try {
+      const updatedBlog = await blogService.update({
+        ...blog,
+        likes: blog.likes + 1,
+      });
+      setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
+    } catch (error) {
+      if (error?.response?.data?.error) {
+        createNotification({
+          message: error.response.data.error,
+          isError: true,
+        });
+      } else {
+        createNotification({
+          message: `Failed to like '${blog.title}'`,
+          isError: true,
+        });
+      }
+    }
+  };
   const content =
     user === null ? (
       <LoginPage
@@ -85,6 +106,7 @@ function App() {
         <BlogList
           currentUser={user}
           blogs={blogs}
+          onLike={onLike}
           onDeleted={(blog) => setBlogs(blogs.filter((b) => b.id !== blog.id))}
         />
       </>

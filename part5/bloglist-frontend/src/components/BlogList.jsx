@@ -4,7 +4,7 @@ import Blog from './Blog';
 import UserType from '../prop-types/User';
 import BlogType from '../prop-types/Blog';
 
-function BlogList({ currentUser, blogs, onDeleted }) {
+function BlogList({ currentUser, blogs, onLike, onDeleted }) {
   return (
     <div>
       <h2>Created Blogs</h2>
@@ -14,7 +14,8 @@ function BlogList({ currentUser, blogs, onDeleted }) {
           <Blog
             key={blog.id}
             currentUser={currentUser}
-            initialBlog={blog}
+            blog={blog}
+            onLike={onLike}
             onDeleted={onDeleted}
           />
         ))}
@@ -24,6 +25,7 @@ function BlogList({ currentUser, blogs, onDeleted }) {
 BlogList.propTypes = {
   currentUser: UserType.isRequired,
   blogs: PropTypes.arrayOf(BlogType).isRequired,
+  onLike: PropTypes.func.isRequired,
   onDeleted: PropTypes.func.isRequired,
 };
 export default BlogList;

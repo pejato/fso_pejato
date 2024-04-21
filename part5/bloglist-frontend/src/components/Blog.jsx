@@ -1,37 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import CreateNotificationContext from '../contexts/CreateNotificationContext';
 import blogService from '../services/blogs';
 import BlogType from '../prop-types/Blog';
 import UserType from '../prop-types/User';
+import CreateNotificationContext from '../contexts/CreateNotificationContext';
 
-function Blog({ currentUser, initialBlog, onDeleted }) {
+function Blog({ currentUser, blog, onLike, onDeleted }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [blog, setBlog] = useState(initialBlog);
-  const createNotification = useContext(CreateNotificationContext);
   const buttonText = isExpanded ? 'Hide' : 'View';
-
-  const onLike = async () => {
-    try {
-      const updatedBlog = await blogService.update({
-        ...blog,
-        likes: blog.likes + 1,
-      });
-      setBlog(updatedBlog);
-    } catch (error) {
-      if (error?.response?.data?.error) {
-        createNotification({
-          message: error.response.data.error,
-          isError: true,
-        });
-      } else {
-        createNotification({
-          message: `Failed to like '${blog.title}'`,
-          isError: true,
-        });
-      }
-    }
-  };
+  const createNotification = useContext(CreateNotificationContext);
 
   const onDelete = async () => {
     try {
@@ -70,7 +47,7 @@ function Blog({ currentUser, initialBlog, onDeleted }) {
       </div>
       <div>
         Likes {blog.likes}
-        <button type="button" onClick={onLike}>
+        <button type="button" onClick={() => onLike(blog)}>
           like
         </button>
       </div>
@@ -95,7 +72,8 @@ function Blog({ currentUser, initialBlog, onDeleted }) {
 }
 Blog.propTypes = {
   currentUser: UserType.isRequired,
-  initialBlog: BlogType.isRequired,
+  blog: BlogType.isRequired,
+  onLike: PropTypes.func.isRequired,
   onDeleted: PropTypes.func.isRequired,
 };
 
