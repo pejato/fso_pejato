@@ -102,5 +102,33 @@ describe.only('Blog app', () => {
         'rgb(211, 211, 211)',
       );
     });
+
+    test('a blog cannot be deleted by users who did not create it', async ({
+      page,
+      request,
+    }) => {
+      const user = {
+        name: 'Kendrick Lamar',
+        username: 'kenny',
+        password: 'dna',
+      };
+      await request.post('/api/users', {
+        data: user,
+      });
+      await createBlog(
+        page,
+        'Young Thug',
+        'Wyclef Jean',
+        'https://en.wikipedia.org/wiki/Young_Thug',
+      );
+
+      await page.getByRole('button', { name: 'Log out' }).click();
+
+      await loginWith(page, user.username, user.password, user.name);
+
+      await page.getByRole('button', { name: 'View' }).click();
+      await page.getByText('Likes 0').waitFor();
+      await expect(page.getByRole('button', { name: 'Remove' })).toHaveCount(0);
+    });
   });
 });
