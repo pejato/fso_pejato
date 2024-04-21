@@ -9,6 +9,7 @@ const loginRouter = require('./controllers/login');
 const {
   errorHandler,
   unknownEndpoint,
+  requestLogger,
   tokenExtractor,
   userExtractor,
 } = require('./utils/middleware');
@@ -19,6 +20,7 @@ mongoose.connect(MONGODB_URI);
 
 app.use(cors());
 app.use(express.json());
+app.use(requestLogger);
 if (process.env.NODE_ENV === 'test') {
   // eslint-disable-next-line global-require
   const testRouter = require('./controllers/testing');
