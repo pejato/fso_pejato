@@ -47,6 +47,7 @@ function CreateBlogForm({ onCreatedBlog }) {
         Title:
         <input
           className="form-input"
+          name="Title"
           type="text"
           value={title}
           onChange={onChangeFactory(setTitle)}
@@ -56,6 +57,7 @@ function CreateBlogForm({ onCreatedBlog }) {
         Author:
         <input
           className="form-input"
+          name="Author"
           type="text"
           value={author}
           onChange={onChangeFactory(setAuthor)}
@@ -65,6 +67,7 @@ function CreateBlogForm({ onCreatedBlog }) {
         URL:
         <input
           className="form-input"
+          name="URL"
           type="text"
           value={url}
           onChange={onChangeFactory(setUrl)}
