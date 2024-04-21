@@ -130,5 +130,41 @@ describe.only('Blog app', () => {
       await page.getByText('Likes 0').waitFor();
       await expect(page.getByRole('button', { name: 'Remove' })).toHaveCount(0);
     });
+
+    test('blogs are sorted with most likes first', async ({ page }) => {
+      const blogs = [
+        { author: 'First author', title: 'First title', url: 'First url' },
+        { author: 'Second author', title: 'Second title', url: 'Second url' },
+        { author: 'Third author', title: 'Third title', url: 'Third url' },
+      ];
+      const likesForBlog = [1, 3, 2];
+      for (const blog of blogs) {
+        await createBlog(page, blog.author, blog.title, blog.url);
+      }
+
+      for (let i = 0; i < 3; i += 1) {
+        const blog = blogs[i];
+
+        const blogDiv = page.getByText(`${blog.title} by ${blog.author}`);
+        await blogDiv.getByRole('button', { name: 'View' }).click();
+        await blogDiv.getByText(blog.url).waitFor();
+        const likeButton = blogDiv.getByRole('button', { name: 'like' });
+
+        for (let j = 0; j < likesForBlog[i]; j += 1) {
+          await likeButton.click();
+          await blogDiv.getByText(`Likes ${j + 1}`).waitFor();
+        }
+      }
+
+      await expect(
+        page.getByText('title by').nth(0).getByText('Likes 3'),
+      ).toBeVisible();
+      await expect(
+        page.getByText('title by').nth(1).getByText('Likes 2'),
+      ).toBeVisible();
+      await expect(
+        page.getByText('title by').nth(2).getByText('Likes 1'),
+      ).toBeVisible();
+    });
   });
 });
