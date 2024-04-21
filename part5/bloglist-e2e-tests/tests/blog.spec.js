@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test');
-const { loginWith } = require('./helper');
+const { loginWith, createBlog } = require('./helper');
 
 describe.only('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -63,19 +63,44 @@ describe.only('Blog app', () => {
     });
 
     test('a blog can be liked after creation', async ({ page }) => {
-      await page.getByRole('button', { name: 'Create new blog' }).click();
-      await page.locator('input[name="Author"]').fill('Young Thug');
-      await page.locator('input[name="Title"]').fill('Wyclef Jean');
-      await page
-        .locator('input[name="URL"]')
-        .fill('https://en.wikipedia.org/wiki/Young_Thug');
-      await page.getByRole('button', { name: 'Create' }).click();
-      await page.getByText('Wyclef Jean by Young Thug').waitFor();
+      await createBlog(
+        page,
+        'Young Thug',
+        'Wyclef Jean',
+        'https://en.wikipedia.org/wiki/Young_Thug',
+      );
 
       await page.getByRole('button', { name: 'View' }).click();
       await expect(page.getByText('Likes 0')).toBeVisible();
       await page.getByRole('button', { name: 'like' }).click();
       await expect(page.getByText('Likes 1')).toBeVisible();
+    });
+
+    test('a blog can be deleted by the user who created it', async ({
+      page,
+    }) => {
+      await createBlog(
+        page,
+        'Young Thug',
+        'Wyclef Jean',
+        'https://en.wikipedia.org/wiki/Young_Thug',
+      );
+
+      await page.getByRole('button', { name: 'View' }).click();
+      await page.getByText('Likes 0').waitFor();
+
+      page.on('dialog', (dialog) => dialog.accept());
+      await page.getByRole('button', { name: 'Remove' }).click();
+
+      const notificationDiv = page.getByText("Removed 'Wyclef Jean'");
+      await expect(notificationDiv).toBeVisible();
+
+      await expect(notificationDiv).toHaveCSS('border-style', 'solid');
+      await expect(notificationDiv).toHaveCSS('color', 'rgb(0, 128, 0)');
+      await expect(notificationDiv).toHaveCSS(
+        'background',
+        'rgb(211, 211, 211)',
+      );
     });
   });
 });
