@@ -38,15 +38,17 @@ const initialState = anecdotesAtStart.map(asObject);
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'VOTE':
-      return state.map((anecdote) => {
-        if (anecdote.id === action.payload.id) {
-          return {
-            ...anecdote,
-            votes: anecdote.votes + 1,
-          };
-        }
-        return anecdote;
-      });
+      return state
+        .map((anecdote) => {
+          if (anecdote.id === action.payload.id) {
+            return {
+              ...anecdote,
+              votes: anecdote.votes + 1,
+            };
+          }
+          return anecdote;
+        })
+        .toSorted((a, b) => b.votes - a.votes);
     case 'CREATE_ANECDOTE':
       return [...state, action.payload.content];
     default:
