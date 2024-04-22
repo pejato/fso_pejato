@@ -33,7 +33,9 @@ export const createAnecdote = (content) => {
   };
 };
 
-const initialState = anecdotesAtStart.map(asObject);
+const initialState = anecdotesAtStart
+  .map(asObject)
+  .toSorted((a, b) => b.votes - a.votes);
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
