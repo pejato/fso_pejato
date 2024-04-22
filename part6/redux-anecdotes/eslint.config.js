@@ -33,6 +33,7 @@ export default [
       'no-console': 'off',
       'no-shadow': 'off',
       'no-underscore-dangle': 'off',
+      'no-param-reassign': 'off',
       'default-param-last': 'off',
       'import/no-named-as-default-member': 'off',
       'import/no-named-as-default': 'off',
