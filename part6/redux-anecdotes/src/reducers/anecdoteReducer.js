@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import anecdoteService from '../services/anecdoteService';
+import { setNotification } from './notificationReducer';
 
 const toSortedByMostVotes = (anecdotes) =>
   anecdotes.toSorted((a, b) => b.votes - a.votes);
@@ -16,15 +17,22 @@ const initializeAnecdotes = createAsyncThunk(
 
 const createAnecdote = createAsyncThunk(
   'anecdotes/createAnecdote',
-  async (content) => {
-    return anecdoteService.create(content);
+  async (content, { dispatch }) => {
+    const anecdote = await anecdoteService.create(content);
+    dispatch(setNotification(`Created ${anecdote.content}`));
+    return anecdote;
   },
 );
 
-const vote = createAsyncThunk('anecdotes/vote', async (anecdote) => {
-  const payload = { id: anecdote.id, votes: anecdote.votes + 1 };
-  return anecdoteService.update(payload);
-});
+const vote = createAsyncThunk(
+  'anecdotes/vote',
+  async (anecdote, { dispatch }) => {
+    const payload = { id: anecdote.id, votes: anecdote.votes + 1 };
+    const updatedAnecdote = await anecdoteService.update(payload);
+    dispatch(setNotification(`Voted for '${updatedAnecdote.content}'`));
+    return updatedAnecdote;
+  },
+);
 
 const anecdoteReducer = createSlice({
   name: 'anecdote',
