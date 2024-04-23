@@ -11,3 +11,8 @@ export const create = async (content) => {
   const response = await axios.post(baseUrl, content);
   return response.data;
 };
+
+export const update = async (update) => {
+  const response = await axios.patch(`${baseUrl}/${update.id}`, update);
+  return response.data;
+};
