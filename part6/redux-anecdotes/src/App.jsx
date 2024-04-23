@@ -4,19 +4,13 @@ import AnecdoteForm from './components/AnecdoteForm';
 import AnecdoteList from './components/AnecdoteList';
 import Filter from './components/Filter';
 import Notification from './components/Notification';
-import anecdoteService from './services/anecdoteService';
-import { setAnecdotes } from './reducers/anecdoteReducer';
+import { initializeAnecdotes } from './reducers/anecdoteReducer';
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    const fetch = async () => {
-      const anecdotes = await anecdoteService.getAll();
-      dispatch(setAnecdotes(anecdotes));
-    };
-    fetch();
+    dispatch(initializeAnecdotes());
   }, []);
-
   return (
     <div>
       <Notification />
