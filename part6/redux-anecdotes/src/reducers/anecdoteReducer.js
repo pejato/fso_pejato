@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import anecdoteService from '../services/anecdoteService';
 
 const toSortedByMostVotes = (anecdotes) =>
@@ -6,6 +6,13 @@ const toSortedByMostVotes = (anecdotes) =>
 
 const sortByMostVotes = (anecdotes) =>
   anecdotes.sort((a, b) => b.votes - a.votes);
+
+const createAnecdote = createAsyncThunk(
+  'anecdotes/createAnecdote',
+  async (content) => {
+    return anecdoteService.create(content);
+  },
+);
 
 const anecdoteReducer = createSlice({
   name: 'anecdote',
@@ -19,16 +26,20 @@ const anecdoteReducer = createSlice({
       state[index].votes += 1;
       sortByMostVotes(state);
     },
-    createAnecdote(state, action) {
-      state.push(action.payload);
-    },
     setAnecdotes(state, action) {
       return toSortedByMostVotes(action.payload);
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(createAnecdote.fulfilled, (state, action) => {
+      state.push(action.payload);
+    });
+  },
 });
 
-export const { vote, createAnecdote, setAnecdotes } = anecdoteReducer.actions;
+export { createAnecdote };
+
+export const { vote, setAnecdotes } = anecdoteReducer.actions;
 
 export const initializeAnecdotes = () => {
   return async (dispatch) => {
