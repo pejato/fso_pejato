@@ -16,7 +16,7 @@ function AnecdoteList() {
   const dispatch = useDispatch();
 
   const onAnecdoteClick = (anecdote) => {
-    dispatch(vote(anecdote.id));
+    dispatch(vote(anecdote));
     showNotificationWithTimeout(dispatch, `Voted for '${anecdote.content}'`);
   };
 

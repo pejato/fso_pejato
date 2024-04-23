@@ -21,32 +21,35 @@ const createAnecdote = createAsyncThunk(
   },
 );
 
+const vote = createAsyncThunk('anecdotes/vote', async (anecdote) => {
+  const payload = { id: anecdote.id, votes: anecdote.votes + 1 };
+  return anecdoteService.update(payload);
+});
+
 const anecdoteReducer = createSlice({
   name: 'anecdote',
   initialState: [],
-  reducers: {
-    vote(state, action) {
-      const index = state.findIndex((a) => a.id === action.payload);
-      if (index === -1) {
-        return;
-      }
-      state[index].votes += 1;
-      sortByMostVotes(state);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(initializeAnecdotes.fulfilled, (state, action) => {
-        return action.payload;
+        return toSortedByMostVotes(action.payload);
       })
       .addCase(createAnecdote.fulfilled, (state, action) => {
         state.push(action.payload);
+        sortByMostVotes(state);
+      })
+      .addCase(vote.fulfilled, (state, action) => {
+        const index = state.findIndex((a) => a.id === action.payload.id);
+        if (index === -1) {
+          state.push(action.payload);
+        } else {
+          state[index] = action.payload;
+        }
+        sortByMostVotes(state);
       });
   },
 });
 
-export { initializeAnecdotes, createAnecdote };
-
-export const { vote } = anecdoteReducer.actions;
-
+export { initializeAnecdotes, createAnecdote, vote };
 export default anecdoteReducer.reducer;
