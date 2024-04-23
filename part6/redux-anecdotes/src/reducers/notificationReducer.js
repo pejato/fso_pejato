@@ -9,7 +9,6 @@ const notificationReducer = createSlice({
     },
     // eslint-disable-next-line no-unused-vars
     removeNotification(state, action) {
-      // eslint-disable-next-line no-unused-vars
       state.message = null;
     },
   },
