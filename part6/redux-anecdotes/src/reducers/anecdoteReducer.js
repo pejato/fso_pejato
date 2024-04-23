@@ -7,6 +7,13 @@ const toSortedByMostVotes = (anecdotes) =>
 const sortByMostVotes = (anecdotes) =>
   anecdotes.sort((a, b) => b.votes - a.votes);
 
+const initializeAnecdotes = createAsyncThunk(
+  'anecdotes/initializeAnecdotes',
+  async () => {
+    return anecdoteService.getAll();
+  },
+);
+
 const createAnecdote = createAsyncThunk(
   'anecdotes/createAnecdote',
   async (content) => {
@@ -26,26 +33,20 @@ const anecdoteReducer = createSlice({
       state[index].votes += 1;
       sortByMostVotes(state);
     },
-    setAnecdotes(state, action) {
-      return toSortedByMostVotes(action.payload);
-    },
   },
   extraReducers: (builder) => {
-    builder.addCase(createAnecdote.fulfilled, (state, action) => {
-      state.push(action.payload);
-    });
+    builder
+      .addCase(initializeAnecdotes.fulfilled, (state, action) => {
+        return action.payload;
+      })
+      .addCase(createAnecdote.fulfilled, (state, action) => {
+        state.push(action.payload);
+      });
   },
 });
 
-export { createAnecdote };
+export { initializeAnecdotes, createAnecdote };
 
-export const { vote, setAnecdotes } = anecdoteReducer.actions;
-
-export const initializeAnecdotes = () => {
-  return async (dispatch) => {
-    const anecdotes = await anecdoteService.getAll();
-    dispatch(setAnecdotes(anecdotes));
-  };
-};
+export const { vote } = anecdoteReducer.actions;
 
 export default anecdoteReducer.reducer;
