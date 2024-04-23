@@ -18,6 +18,11 @@ const AnecdoteForm = () => {
         createNotification(`Created new anecdote, '${anecdote.content}'`),
       );
     },
+    onError: (error) => {
+      const errorText =
+        error.response?.data?.error ?? "An unknown error occurred";
+      notificationDispatch(createNotification(errorText));
+    },
   });
 
   const onCreate = (event) => {
