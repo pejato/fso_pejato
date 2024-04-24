@@ -7,6 +7,8 @@ const Country = ({ country }) => {
     return <div>not found...</div>;
   }
 
+  console.log(country);
+
   return (
     <div>
       <h3>{country.data.name} </h3>

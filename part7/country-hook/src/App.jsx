@@ -1,20 +1,6 @@
 import { useState } from 'react';
-import { useCountry } from './hooks';
+import { useCountry, useField } from './hooks';
 import Country from './components/Country';
-
-const useField = (type) => {
-  const [value, setValue] = useState('');
-
-  const onChange = (event) => {
-    setValue(event.target.value);
-  };
-
-  return {
-    type,
-    value,
-    onChange,
-  };
-};
 
 const App = () => {
   const nameInput = useField('text');
