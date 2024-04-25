@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../api/apiSlice';
 import { showNotification } from '../reducers/notificationReducer';
 
-function LoginForm({ username, password, onUsernameChange, onPasswordChange }) {
+function LoginForm() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
 
@@ -27,7 +29,7 @@ function LoginForm({ username, password, onUsernameChange, onPasswordChange }) {
           type="text"
           value={username}
           name="Username"
-          onChange={onUsernameChange}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </div>
       <div>
@@ -37,7 +39,7 @@ function LoginForm({ username, password, onUsernameChange, onPasswordChange }) {
           type="password"
           value={password}
           name="Password"
-          onChange={onPasswordChange}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <button type="submit" disabled={isLoading}>
