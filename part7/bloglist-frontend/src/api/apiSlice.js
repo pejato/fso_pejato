@@ -3,10 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const baseQuery = fetchBaseQuery({
   baseUrl: '/api',
   prepareHeaders: (headers, api) => {
-    if (api.auth?.token) {
-      headers.set('authorization', api.auth.token);
-    } else {
-      console.log(api.getState());
+    if (api.getState().auth?.token) {
+      headers.set('Authorization', api.getState().auth.token);
     }
 
     return headers;
