@@ -19,8 +19,10 @@ function CreateBlogForm({ onCreatedBlog }) {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      await createBlog({ title, author, url }).unwrap();
-      dispatch(showNotification(`Created a new blog with title: '${title}'`));
+      const blog = await createBlog({ title, author, url }).unwrap();
+      dispatch(
+        showNotification(`Created a new blog with title: '${blog.title}'`),
+      );
       onCreatedBlog();
       setTitle('');
       setAuthor('');

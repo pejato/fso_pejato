@@ -1,10 +1,22 @@
-import { afterEach, vi } from 'vitest';
+import { afterAll, afterEach, beforeEach, vi } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { Provider } from 'react-redux';
+import { setupServer } from 'msw/node';
+
+export const server = setupServer();
+
+beforeEach(() => {
+  server.listen();
+});
 
 afterEach(() => {
   cleanup();
+  server.resetHandlers();
+});
+
+afterAll(() => {
+  server.close();
 });
 
 const thunkMiddleware =

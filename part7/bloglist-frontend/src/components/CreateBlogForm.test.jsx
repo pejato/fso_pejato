@@ -1,15 +1,15 @@
 // TODO: Update this test to work with notification reducer
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import { expect, describe, test, vi } from 'vitest';
+import { expect, describe, test, vi, beforeAll } from 'vitest';
+import { HttpResponse, http } from 'msw';
 import CreateBlogForm from './CreateBlogForm';
-import { renderWithProviders } from '../../testSetup';
+import { renderWithProviders, server } from '../../testSetup';
+import store from '../store';
 
 describe('CreateBlogForm', () => {
-  test('creates blog on submit', async () => {
+  beforeAll(() => {
     const blog = {
       title: 'My title!',
       author: 'Cornelius Fudge',
@@ -24,11 +24,16 @@ describe('CreateBlogForm', () => {
         id: 'some user id',
       },
     };
-    const adapter = new MockAdapter(axios);
-    adapter.onPost('/api/blogs', blog).reply(201, responseBlog);
+    server.use(
+      http.post('/api/blogs', async () => HttpResponse.json(responseBlog)),
+    );
+  });
 
+  test('creates blog on submit', async () => {
     const onCreated = vi.fn();
-    renderWithProviders(<CreateBlogForm onCreatedBlog={onCreated} />);
+    renderWithProviders(<CreateBlogForm onCreatedBlog={onCreated} />, {
+      store,
+    });
 
     const titleDiv = screen.getByText('Title:');
     const titleInput = within(titleDiv).getByRole('textbox');
@@ -47,7 +52,6 @@ describe('CreateBlogForm', () => {
     const submitButton = screen.getByText('Create');
     await user.click(submitButton);
 
-    expect(onCreated.mock.calls).toHaveLength(1);
-    expect(onCreated.mock.calls[0][0]).toStrictEqual(responseBlog);
+    await waitFor(() => expect(onCreated.mock.calls).toHaveLength(1));
   });
 });
