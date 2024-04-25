@@ -12,7 +12,6 @@ import Togglable from './components/Togglable';
 import { showNotification } from './reducers/notificationReducer';
 
 function App() {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -23,9 +22,6 @@ function App() {
   useEffect(() => {
     loginService.listenForUnauthenticated(() => setUser(null));
   });
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
   useEffect(() => {
     const userJSONString = window.localStorage.getItem('blogListUser');
     if (userJSONString) {
@@ -53,7 +49,8 @@ function App() {
   };
   const onCreatedBlog = (blog) => {
     blogFormRef.current.toggleVisibility();
-    setBlogs(blogs.concat(blog));
+    // TODO: Fix create
+    // setBlogs(blogs.concat(blog));
   };
   const onLike = async (blog) => {
     try {
@@ -61,7 +58,8 @@ function App() {
         ...blog,
         likes: blog.likes + 1,
       });
-      setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
+      // TODO: Fix like logic
+      // setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
     } catch (error) {
       if (error?.response?.data?.error) {
         dispatch(showNotification(error.response.data.error, true));
@@ -88,9 +86,11 @@ function App() {
         </Togglable>
         <BlogList
           currentUser={user}
-          blogs={blogs}
           onLike={onLike}
-          onDeleted={(blog) => setBlogs(blogs.filter((b) => b.id !== blog.id))}
+          onDeleted={(blog) => {
+            // TODO: Fix delete logic
+            // setBlogs(blogs.filter((b) => b.id !== blog.id))
+          }}
         />
       </>
     );

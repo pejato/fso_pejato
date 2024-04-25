@@ -18,7 +18,6 @@ const thunkMiddleware =
     return next(action);
   };
 
-// eslint-disable-next-line import/prefer-default-export
 export const createStore = () => {
   const store = {
     getState: vi.fn(() => ({})),
