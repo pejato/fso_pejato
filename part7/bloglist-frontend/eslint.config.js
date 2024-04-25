@@ -6,7 +6,6 @@ import { FlatCompat } from '@eslint/eslintrc';
 import pluginJs from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import eslintPluginVitestGlobals from 'eslint-plugin-vitest-globals';
 
 // mimic CommonJS variables -- not needed if using CommonJS
 const __filename = fileURLToPath(import.meta.url);
@@ -23,10 +22,7 @@ export default [
   eslintPluginPrettierRecommended,
   {
     languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...eslintPluginVitestGlobals.environments.env.globals,
-      },
+      globals: globals.browser,
       ecmaVersion: 'latest',
       sourceType: 'module',
     },
