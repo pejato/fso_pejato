@@ -1,32 +1,28 @@
-import { React, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { React } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { showNotification } from '../reducers/notificationReducer';
 import { useCreateBlogMutation } from '../api/apiSlice';
+import {
+  clearFields,
+  setAuthor,
+  setTitle,
+  setUrl,
+} from '../reducers/createBlogFormReducer';
 
 function CreateBlogForm({ onCreatedBlog }) {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
-
+  const state = useSelector((state) => state.createBlogForm);
   const dispatch = useDispatch();
   const [createBlog, { isLoading }] = useCreateBlogMutation();
 
-  const onChangeFactory = (setter) => {
-    return (event) => {
-      setter(event.target.value);
-    };
-  };
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      const blog = await createBlog({ title, author, url }).unwrap();
+      const blog = await createBlog({ ...state }).unwrap();
       dispatch(
         showNotification(`Created a new blog with title: '${blog.title}'`),
       );
       onCreatedBlog();
-      setTitle('');
-      setAuthor('');
-      setUrl('');
+      dispatch(clearFields());
     } catch (error) {
       dispatch(
         showNotification(error.data?.error ?? 'Something went wrong', true),
@@ -43,8 +39,8 @@ function CreateBlogForm({ onCreatedBlog }) {
           className="form-input"
           name="Title"
           type="text"
-          value={title}
-          onChange={onChangeFactory(setTitle)}
+          value={state.title}
+          onChange={(e) => dispatch(setTitle(e.target.value))}
         />
       </div>
       <div>
@@ -53,8 +49,8 @@ function CreateBlogForm({ onCreatedBlog }) {
           className="form-input"
           name="Author"
           type="text"
-          value={author}
-          onChange={onChangeFactory(setAuthor)}
+          value={state.author}
+          onChange={(e) => dispatch(setAuthor(e.target.value))}
         />
       </div>
       <div>
@@ -63,8 +59,8 @@ function CreateBlogForm({ onCreatedBlog }) {
           className="form-input"
           name="URL"
           type="text"
-          value={url}
-          onChange={onChangeFactory(setUrl)}
+          value={state.url}
+          onChange={(e) => dispatch(setUrl(e.target.value))}
         />
       </div>
       <button type="submit" onClick={onSubmit} disabled={isLoading}>
