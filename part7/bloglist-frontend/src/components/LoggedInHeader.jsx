@@ -1,5 +1,4 @@
 import { React } from 'react';
-import UserType from '../prop-types/User';
 
 function LoggedInHeader({ setUser, user }) {
   return (

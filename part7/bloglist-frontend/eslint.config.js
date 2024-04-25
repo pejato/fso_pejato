@@ -38,6 +38,7 @@ export default [
       'react/button-has-type': 'off',
       'react/jsx-props-no-spreading': 'off',
       'react/display-name': 'error',
+      'react/prop-types': 'off',
       'import/no-extraneous-dependencies': [
         'error',
         {
