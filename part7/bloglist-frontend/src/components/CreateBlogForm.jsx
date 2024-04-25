@@ -1,5 +1,4 @@
 import { React, useContext, useState } from 'react';
-import PropTypes from 'prop-types';
 import blogService from '../services/blogs';
 import CreateNotificationContext from '../contexts/CreateNotificationContext';
 
@@ -80,7 +79,4 @@ function CreateBlogForm({ onCreatedBlog }) {
   );
 }
 
-CreateBlogForm.propTypes = {
-  onCreatedBlog: PropTypes.func.isRequired,
-};
 export default CreateBlogForm;

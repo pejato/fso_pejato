@@ -1,8 +1,5 @@
 import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import blogService from '../services/blogs';
-import BlogType from '../prop-types/Blog';
-import UserType from '../prop-types/User';
 import CreateNotificationContext from '../contexts/CreateNotificationContext';
 
 function Blog({ currentUser, blog, onLike, onDeleted }) {
@@ -70,11 +67,5 @@ function Blog({ currentUser, blog, onLike, onDeleted }) {
     </div>
   );
 }
-Blog.propTypes = {
-  currentUser: UserType.isRequired,
-  blog: BlogType.isRequired,
-  onLike: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func.isRequired,
-};
 
 export default Blog;
