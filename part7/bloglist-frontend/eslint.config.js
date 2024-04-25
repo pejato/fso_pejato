@@ -39,6 +39,7 @@ export default [
       'react/jsx-props-no-spreading': 'off',
       'react/display-name': 'error',
       'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
       'import/no-extraneous-dependencies': [
         'error',
         {
@@ -47,6 +48,7 @@ export default [
             'eslint.config.js',
             'test*.js',
             '**/*{.,_}{test,spec}.{js,jsx}',
+            'testSetup.{js,jsx}',
           ],
         },
       ],
