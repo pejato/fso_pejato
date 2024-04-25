@@ -1,5 +1,5 @@
 import { useState, useEffect, React, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import blogService from './services/blogs';
 import LoginPage from './components/LoginPage';
 import BlogList from './components/BlogList';
@@ -12,24 +12,26 @@ import Togglable from './components/Togglable';
 import { showNotification } from './reducers/notificationReducer';
 
 function App() {
-  const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const blogFormRef = useRef();
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    loginService.listenForUnauthenticated(() => setUser(null));
+  const user = useSelector((state) => {
+    return state.auth;
   });
-  useEffect(() => {
-    const userJSONString = window.localStorage.getItem('blogListUser');
-    if (userJSONString) {
-      const user = JSON.parse(userJSONString);
-      loginService.setToken(user.token);
-      setUser(user);
-    }
-  }, []);
+
+  // useEffect(() => {
+  //   loginService.listenForUnauthenticated(() => setUser(null));
+  // });
+  // useEffect(() => {
+  //   const userJSONString = window.localStorage.getItem('blogListUser');
+  //   if (userJSONString) {
+  //     const user = JSON.parse(userJSONString);
+  //     loginService.setToken(user.token);
+  //     setUser(user);
+  //   }
+  // }, []);
 
   const onLoginSubmit = async (event) => {
     event.preventDefault();
@@ -80,7 +82,7 @@ function App() {
     ) : (
       <>
         <h2>Blogs</h2>
-        <LoggedInHeader setUser={setUser} user={user} />
+        <LoggedInHeader user={user} />
         <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
           <CreateBlogForm onCreatedBlog={onCreatedBlog} />
         </Togglable>

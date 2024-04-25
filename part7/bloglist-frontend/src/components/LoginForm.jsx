@@ -1,12 +1,23 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useLoginMutation } from '../api/apiSlice';
+import { showNotification } from '../reducers/notificationReducer';
 
-function LoginForm({
-  username,
-  password,
-  onSubmit,
-  onUsernameChange,
-  onPasswordChange,
-}) {
+function LoginForm({ username, password, onUsernameChange, onPasswordChange }) {
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    // TODO: Use middleware to handle errors
+    try {
+      await login({ username, password }).unwrap();
+    } catch (error) {
+      dispatch(
+        showNotification(error.data?.error ?? 'Something went wrong', true),
+      );
+    }
+  };
   return (
     <form onSubmit={onSubmit}>
       <div>
@@ -29,7 +40,9 @@ function LoginForm({
           onChange={onPasswordChange}
         />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit" disabled={isLoading}>
+        Login
+      </button>
     </form>
   );
 }

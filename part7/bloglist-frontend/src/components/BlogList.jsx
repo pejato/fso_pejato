@@ -3,14 +3,24 @@ import Blog from './Blog';
 import { useGetBlogsQuery } from '../api/apiSlice';
 
 function BlogList({ currentUser, onLike, onDeleted }) {
-  const { data: blogs, isSuccess, isError, error } = useGetBlogsQuery();
+  const {
+    data: blogs,
+    isSuccess,
+    isError,
+    error,
+    isLoading,
+  } = useGetBlogsQuery();
 
   if (isError) {
     return <div>{error.message}</div>;
   }
-  if (!isSuccess) {
-    return <div>Something went wrong...</div>;
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
+  if (!isSuccess) {
+    return <div>Something went wrong :&#40;</div>;
+  }
+
   return (
     <div>
       <h2>Created Blogs</h2>
