@@ -9,14 +9,14 @@ const getNewNotificationId = () => {
 
 const notificationReducer = createSlice({
   name: 'notification',
-  initialState: { message: null, id: null },
+  initialState: { message: null, isError: false, id: null },
   reducers: (create) => ({
     setNotification: create.reducer((state, action) => {
       return action.payload;
     }),
     removeNotification: create.reducer((state, action) => {
       if (action.payload === state.id) {
-        return { message: null, id: state.id };
+        return { ...state, message: null };
       }
       return state;
     }),
@@ -28,10 +28,10 @@ export const { setNotification, removeNotification } =
 
 export default notificationReducer.reducer;
 
-export const showNotification = (message) => {
+export const showNotification = (message, isError = false) => {
   return (dispatch) => {
     const id = getNewNotificationId();
-    dispatch(setNotification({ message, id }));
+    dispatch(setNotification({ message, isError, id }));
     setTimeout(() => dispatch(removeNotification(id)), 5000);
   };
 };

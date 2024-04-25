@@ -45,9 +45,9 @@ function App() {
       setPassword('');
     } catch (error) {
       if (error.response?.data?.error) {
-        dispatch(showNotification(error.response.data.error));
+        dispatch(showNotification(error.response.data.error, true));
       } else {
-        dispatch(showNotification('An unknown error occurred'));
+        dispatch(showNotification('An unknown error occurred', true));
       }
     }
   };
@@ -64,9 +64,9 @@ function App() {
       setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
     } catch (error) {
       if (error?.response?.data?.error) {
-        dispatch(showNotification(error.response.data.error));
+        dispatch(showNotification(error.response.data.error, true));
       } else {
-        dispatch(showNotification(`Failed to like '${blog.title}'`));
+        dispatch(showNotification(`Failed to like '${blog.title}'`, true));
       }
     }
   };

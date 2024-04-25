@@ -25,10 +25,10 @@ function CreateBlogForm({ onCreatedBlog }) {
       setUrl('');
     } catch (error) {
       if (error.response?.data?.error) {
-        dispatch(showNotification(error.response.data.error));
+        dispatch(showNotification(error.response.data.error, true));
       } else {
         dispatch(
-          showNotification('Failed to create blog with an unknown error'),
+          showNotification('Failed to create blog with an unknown error', true),
         );
       }
     }

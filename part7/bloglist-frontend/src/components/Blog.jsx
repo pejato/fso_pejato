@@ -17,9 +17,9 @@ function Blog({ currentUser, blog, onLike, onDeleted }) {
       }
     } catch (error) {
       if (error?.response?.data?.error) {
-        dispatch(showNotification(error.response.data.error));
+        dispatch(showNotification(error.response.data.error, true));
       } else {
-        dispatch(showNotification(`Removed '${blog.title}'`));
+        dispatch(showNotification(`Removed '${blog.title}'`, true));
       }
     }
   };

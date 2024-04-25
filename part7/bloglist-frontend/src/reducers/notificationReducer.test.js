@@ -8,10 +8,14 @@ describe('notificationReducer', () => {
   describe('/setNotification', () => {
     test('sets message and id', () => {
       const state = notificationReducer(
-        { message: null, id: 0 },
-        setNotification({ message: 'emergency!', id: 1 }),
+        { message: null, isError: false, id: 0 },
+        setNotification({ message: 'emergency!', isError: true, id: 1 }),
       );
-      expect(state).toStrictEqual({ message: 'emergency!', id: 1 });
+      expect(state).toStrictEqual({
+        message: 'emergency!',
+        isError: true,
+        id: 1,
+      });
     });
   });
 
