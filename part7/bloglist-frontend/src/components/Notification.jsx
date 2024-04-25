@@ -1,6 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-function Notification({ message, isError }) {
+// TODO: Implement isError handling again
+function Notification() {
+  const message = useSelector((state) => state.notification.message);
+  const isError = false;
+
   if (!message) {
     return null;
   }

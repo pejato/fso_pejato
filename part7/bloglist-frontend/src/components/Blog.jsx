@@ -1,30 +1,25 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import blogService from '../services/blogs';
-import CreateNotificationContext from '../contexts/CreateNotificationContext';
+import { showNotification } from '../reducers/notificationReducer';
 
 function Blog({ currentUser, blog, onLike, onDeleted }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const buttonText = isExpanded ? 'Hide' : 'View';
-  const createNotification = useContext(CreateNotificationContext);
+  const dispatch = useDispatch();
 
   const onDelete = async () => {
     try {
       if (window.confirm(`Are you sure you want to remove '${blog.title}'?`)) {
         await blogService.remove(blog);
-        createNotification({ message: `Removed '${blog.title}'` });
+        dispatch(showNotification(`Removed '${blog.title}'`));
         onDeleted(blog);
       }
     } catch (error) {
       if (error?.response?.data?.error) {
-        createNotification({
-          message: error.response.data.error,
-          isError: true,
-        });
+        dispatch(showNotification(error.response.data.error));
       } else {
-        createNotification({
-          message: `Failed to delete '${blog.title}'`,
-          isError: true,
-        });
+        dispatch(showNotification(`Removed '${blog.title}'`));
       }
     }
   };

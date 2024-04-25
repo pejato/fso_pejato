@@ -1,4 +1,5 @@
-import { useState, useEffect, React, useCallback, useRef } from 'react';
+import { useState, useEffect, React, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import blogService from './services/blogs';
 import LoginPage from './components/LoginPage';
 import BlogList from './components/BlogList';
@@ -7,23 +8,17 @@ import './App.css';
 import LoggedInHeader from './components/LoggedInHeader';
 import Notification from './components/Notification';
 import CreateBlogForm from './components/CreateBlogForm';
-import CreateNotificationContext from './contexts/CreateNotificationContext';
 import Togglable from './components/Togglable';
+import { showNotification } from './reducers/notificationReducer';
 
 function App() {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [notificationInfo, setNotificationInfo] = useState(null);
   const blogFormRef = useRef();
 
-  const createNotification = useCallback((notification) => {
-    setNotificationInfo(notification);
-    setTimeout(() => {
-      setNotificationInfo(null);
-    }, 5000);
-  }, []);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     loginService.listenForUnauthenticated(() => setUser(null));
@@ -50,15 +45,9 @@ function App() {
       setPassword('');
     } catch (error) {
       if (error.response?.data?.error) {
-        createNotification({
-          message: error.response.data.error,
-          isError: true,
-        });
+        dispatch(showNotification(error.response.data.error));
       } else {
-        createNotification({
-          message: 'An unknown error occurred',
-          isError: true,
-        });
+        dispatch(showNotification('An unknown error occurred'));
       }
     }
   };
@@ -75,15 +64,9 @@ function App() {
       setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
     } catch (error) {
       if (error?.response?.data?.error) {
-        createNotification({
-          message: error.response.data.error,
-          isError: true,
-        });
+        dispatch(showNotification(error.response.data.error));
       } else {
-        createNotification({
-          message: `Failed to like '${blog.title}'`,
-          isError: true,
-        });
+        dispatch(showNotification(`Failed to like '${blog.title}'`));
       }
     }
   };
@@ -113,10 +96,10 @@ function App() {
     );
 
   return (
-    <CreateNotificationContext.Provider value={createNotification}>
-      <Notification {...notificationInfo} />
+    <div>
+      <Notification />
       {content}
-    </CreateNotificationContext.Provider>
+    </div>
   );
 }
 

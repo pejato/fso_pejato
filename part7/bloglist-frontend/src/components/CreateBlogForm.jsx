@@ -1,12 +1,13 @@
-import { React, useContext, useState } from 'react';
+import { React, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import blogService from '../services/blogs';
-import CreateNotificationContext from '../contexts/CreateNotificationContext';
+import { showNotification } from '../reducers/notificationReducer';
 
 function CreateBlogForm({ onCreatedBlog }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
-  const createNotification = useContext(CreateNotificationContext);
+  const dispatch = useDispatch();
 
   const onChangeFactory = (setter) => {
     return (event) => {
@@ -17,24 +18,18 @@ function CreateBlogForm({ onCreatedBlog }) {
     event.preventDefault();
     try {
       const blog = await blogService.create({ title, author, url });
-      createNotification({
-        message: `Created a new blog with title: '${title}'`,
-      });
+      dispatch(showNotification(`Created a new blog with title: '${title}'`));
       onCreatedBlog(blog);
       setTitle('');
       setAuthor('');
       setUrl('');
     } catch (error) {
       if (error.response?.data?.error) {
-        createNotification({
-          message: error.response.data.error,
-          isError: true,
-        });
+        dispatch(showNotification(error.response.data.error));
       } else {
-        createNotification({
-          message: 'Failed to create blog with an unknown error',
-          isError: true,
-        });
+        dispatch(
+          showNotification('Failed to create blog with an unknown error'),
+        );
       }
     }
   };
