@@ -1,13 +1,15 @@
 import { React, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import blogService from '../services/blogs';
 import { showNotification } from '../reducers/notificationReducer';
+import { useCreateBlogMutation } from '../api/apiSlice';
 
 function CreateBlogForm({ onCreatedBlog }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+
   const dispatch = useDispatch();
+  const [createBlog, { isLoading }] = useCreateBlogMutation();
 
   const onChangeFactory = (setter) => {
     return (event) => {
@@ -17,20 +19,16 @@ function CreateBlogForm({ onCreatedBlog }) {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      const blog = await blogService.create({ title, author, url });
+      await createBlog({ title, author, url }).unwrap();
       dispatch(showNotification(`Created a new blog with title: '${title}'`));
-      onCreatedBlog(blog);
+      onCreatedBlog();
       setTitle('');
       setAuthor('');
       setUrl('');
     } catch (error) {
-      if (error.response?.data?.error) {
-        dispatch(showNotification(error.response.data.error, true));
-      } else {
-        dispatch(
-          showNotification('Failed to create blog with an unknown error', true),
-        );
-      }
+      dispatch(
+        showNotification(error.data?.error ?? 'Something went wrong', true),
+      );
     }
   };
 
@@ -67,7 +65,7 @@ function CreateBlogForm({ onCreatedBlog }) {
           onChange={onChangeFactory(setUrl)}
         />
       </div>
-      <button type="submit" onClick={onSubmit}>
+      <button type="submit" onClick={onSubmit} disabled={isLoading}>
         Create
       </button>
     </form>

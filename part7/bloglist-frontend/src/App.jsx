@@ -18,10 +18,8 @@ function App() {
     return state.auth;
   });
 
-  const onCreatedBlog = (blog) => {
+  const onCreatedBlog = () => {
     blogFormRef.current.toggleVisibility();
-    // TODO: Fix create
-    // setBlogs(blogs.concat(blog));
   };
   const onLike = async (blog) => {
     try {

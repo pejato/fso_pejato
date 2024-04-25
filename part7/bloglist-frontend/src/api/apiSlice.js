@@ -4,7 +4,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: '/api',
   prepareHeaders: (headers, api) => {
     if (api.getState().auth?.token) {
-      headers.set('Authorization', api.getState().auth.token);
+      headers.set('Authorization', `Bearer ${api.getState().auth.token}`);
     }
 
     return headers;
@@ -16,6 +16,15 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getBlogs: builder.query({
       query: () => '/blogs',
+      providesTags: ['Blogs'],
+    }),
+    createBlog: builder.mutation({
+      query: (newBlog) => ({
+        url: '/blogs',
+        method: 'POST',
+        body: newBlog,
+      }),
+      invalidatesTags: ['Blogs'],
     }),
     login: builder.mutation({
       query: ({ username, password }) => ({
@@ -27,4 +36,5 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetBlogsQuery, useLoginMutation } = apiSlice;
+export const { useGetBlogsQuery, useCreateBlogMutation, useLoginMutation } =
+  apiSlice;
