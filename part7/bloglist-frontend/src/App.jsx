@@ -1,5 +1,6 @@
 import { React, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import BlogList from './components/BlogList';
 import './App.css';
@@ -29,7 +30,13 @@ function App() {
         <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
           <CreateBlogForm onCreatedBlog={onCreatedBlog} />
         </Togglable>
-        <BlogList currentUser={user} />
+
+        <Routes>
+          <Route path="/blogs/:id" element={<div>TODO: Blog detail!</div>} />
+          <Route path="/blogs?" element={<BlogList currentUser={user} />} />
+          <Route path="/users/:id" element={<div>TODO: User detail!</div>} />
+          <Route path="/users" element={<div>TODO: Users!</div>} />
+        </Routes>
       </>
     );
 
