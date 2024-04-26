@@ -8,6 +8,7 @@ import LoggedInHeader from './components/LoggedInHeader';
 import Notification from './components/Notification';
 import CreateBlogForm from './components/CreateBlogForm';
 import Togglable from './components/Togglable';
+import UserList from './components/UserList';
 
 function App() {
   const blogFormRef = useRef();
@@ -35,7 +36,7 @@ function App() {
           <Route path="/blogs/:id" element={<div>TODO: Blog detail!</div>} />
           <Route path="/blogs?" element={<BlogList currentUser={user} />} />
           <Route path="/users/:id" element={<div>TODO: User detail!</div>} />
-          <Route path="/users" element={<div>TODO: Users!</div>} />
+          <Route path="/users" element={<UserList />} />
         </Routes>
       </>
     );
