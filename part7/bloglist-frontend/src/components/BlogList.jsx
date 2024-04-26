@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Blog from './Blog';
 import { useGetBlogsQuery } from '../api/apiSlice';
+import Togglable from './Togglable';
+import CreateBlogForm from './CreateBlogForm';
 
 function BlogList({ currentUser }) {
   const {
@@ -10,6 +12,11 @@ function BlogList({ currentUser }) {
     error,
     isLoading,
   } = useGetBlogsQuery();
+
+  const blogFormRef = useRef();
+  const onCreatedBlog = () => {
+    blogFormRef.current.toggleVisibility();
+  };
 
   if (isError) {
     return <div>{error.message}</div>;
@@ -23,6 +30,9 @@ function BlogList({ currentUser }) {
 
   return (
     <div>
+      <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+        <CreateBlogForm onCreatedBlog={onCreatedBlog} />
+      </Togglable>
       <h2>Created Blogs</h2>
       {blogs
         .toSorted((a, b) => b.likes - a.likes)
