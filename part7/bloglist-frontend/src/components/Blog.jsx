@@ -2,11 +2,25 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import blogService from '../services/blogs';
 import { showNotification } from '../reducers/notificationReducer';
+import { useUpdateBlogMutation } from '../api/apiSlice';
 
-function Blog({ currentUser, blog, onLike, onDeleted }) {
+function Blog({ currentUser, blog, onDeleted }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const buttonText = isExpanded ? 'Hide' : 'View';
   const dispatch = useDispatch();
+  const [updateBlog, { isLoading }] = useUpdateBlogMutation();
+
+  const likeBlog = async () => {
+    try {
+      await updateBlog({ id: blog.id, likes: blog.likes + 1 }).unwrap();
+    } catch (error) {
+      if (error?.data?.error) {
+        dispatch(showNotification(error.data.error, true));
+      } else {
+        dispatch(showNotification(`Failed to like '${blog.title}'`, true));
+      }
+    }
+  };
 
   const onDelete = async () => {
     try {
@@ -39,7 +53,7 @@ function Blog({ currentUser, blog, onLike, onDeleted }) {
       </div>
       <div>
         Likes {blog.likes}
-        <button type="button" onClick={() => onLike(blog)}>
+        <button type="button" disabled={isLoading} onClick={likeBlog}>
           like
         </button>
       </div>

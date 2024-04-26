@@ -2,7 +2,7 @@ import React from 'react';
 import Blog from './Blog';
 import { useGetBlogsQuery } from '../api/apiSlice';
 
-function BlogList({ currentUser, onLike, onDeleted }) {
+function BlogList({ currentUser, onDeleted }) {
   const {
     data: blogs,
     isSuccess,
@@ -31,7 +31,6 @@ function BlogList({ currentUser, onLike, onDeleted }) {
             key={blog.id}
             currentUser={currentUser}
             blog={blog}
-            onLike={onLike}
             onDeleted={onDeleted}
           />
         ))}
