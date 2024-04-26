@@ -14,9 +14,20 @@ const baseQuery = fetchBaseQuery({
 export const apiSlice = createApi({
   baseQuery,
   endpoints: (builder) => ({
+    getBasicBlogs: builder.query({
+      query: () => '/blogs/basic_view',
+      providesTags: ['BasicBlogs'],
+    }),
     getBlogs: builder.query({
       query: () => '/blogs',
       providesTags: ['Blogs'],
+    }),
+    getBlog: builder.query({
+      query: (id) => ({
+        url: `/blogs/${id}`,
+        method: 'GET',
+      }),
+      providesTags: (result, error, id) => [{ type: 'Blog', id }],
     }),
     createBlog: builder.mutation({
       query: (newBlog) => ({
@@ -24,7 +35,7 @@ export const apiSlice = createApi({
         method: 'POST',
         body: newBlog,
       }),
-      invalidatesTags: ['Blogs'],
+      invalidatesTags: ['BasicBlogs', 'Blogs'],
     }),
     updateBlog: builder.mutation({
       query: ({ id, ...patchSet }) => ({
@@ -32,14 +43,22 @@ export const apiSlice = createApi({
         method: 'PATCH',
         body: patchSet,
       }),
-      invalidatesTags: ['Blogs'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'BasicBlogs' },
+        { type: 'Blogs' },
+        { type: 'Blog', id },
+      ],
     }),
     deleteBlog: builder.mutation({
       query: (id) => ({
         url: `/blogs/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Blogs'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'BasicBlogs' },
+        { type: 'Blogs' },
+        { type: 'Blog', id },
+      ],
     }),
     login: builder.mutation({
       query: ({ username, password }) => ({
@@ -52,7 +71,9 @@ export const apiSlice = createApi({
 });
 
 export const {
+  useGetBasicBlogsQuery,
   useGetBlogsQuery,
+  useGetBlogQuery,
   useCreateBlogMutation,
   useUpdateBlogMutation,
   useDeleteBlogMutation,
