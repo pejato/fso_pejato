@@ -10,6 +10,11 @@ router.get('/', async (request, response) => {
   response.json(blogs);
 });
 
+router.get('/basic_view', async (request, response) => {
+  const blogs = await Blog.find({}, { author: 1, title: 1 });
+  response.json(blogs);
+});
+
 router.get('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id).populate(
     'user',

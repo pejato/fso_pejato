@@ -33,6 +33,18 @@ describe('when there are blogs in the database', () => {
     }
   });
 
+  test('basic_view returns title, author, and id only', async () => {
+    const blogs = await testHelper.blogsInDb();
+    const response = await api.get('/api/blogs/basic_view');
+    const basicBlogs = response.body.toSorted((a, b) => a.id - b.id);
+    const expectedBasicBlogs = blogs
+      .map((b) => {
+        return { author: b.author, title: b.title, id: b.id };
+      })
+      .toSorted((a, b) => a.id - b.id);
+    assert.deepStrictEqual(basicBlogs, expectedBasicBlogs);
+  });
+
   test('blogs can be fetched by id', async () => {
     const blogs = await testHelper.blogsInDb();
     const blogId = blogs[0].id;
