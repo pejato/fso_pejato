@@ -33,13 +33,13 @@ describe('when there are blogs in the database', () => {
     }
   });
 
-  test('basic_view returns title, author, and id only', async () => {
+  test('basic_view returns title, author, likes, and id only', async () => {
     const blogs = await testHelper.blogsInDb();
     const response = await api.get('/api/blogs/basic_view');
     const basicBlogs = response.body.toSorted((a, b) => a.id - b.id);
     const expectedBasicBlogs = blogs
       .map((b) => {
-        return { author: b.author, title: b.title, id: b.id };
+        return { author: b.author, title: b.title, id: b.id, likes: b.likes };
       })
       .toSorted((a, b) => a.id - b.id);
     assert.deepStrictEqual(basicBlogs, expectedBasicBlogs);

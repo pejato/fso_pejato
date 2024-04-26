@@ -11,7 +11,7 @@ router.get('/', async (request, response) => {
 });
 
 router.get('/basic_view', async (request, response) => {
-  const blogs = await Blog.find({}, { author: 1, title: 1 });
+  const blogs = await Blog.find({}, { author: 1, title: 1, likes: 1 });
   response.json(blogs);
 });
 
