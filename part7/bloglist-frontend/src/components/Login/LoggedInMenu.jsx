@@ -1,5 +1,6 @@
 import { React } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { logout } from '../../reducers/authReducer';
 
 function LoggedInHeader() {
@@ -10,8 +11,11 @@ function LoggedInHeader() {
   }
 
   return (
-    <div className="logged-in-label">
-      Logged in as {user.name}{' '}
+    <div className="logged-in-menu">
+      <Link to="/blogs">Blogs</Link>
+      <Link to="/users">Users</Link>
+      <span>Logged in as {user.name}</span>
+
       <button
         type="button"
         onClick={() => {

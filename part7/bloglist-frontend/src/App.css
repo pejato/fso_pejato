@@ -1,5 +1,12 @@
-.logged-in-label {
-    padding-bottom: 10px;
+.logged-in-menu {
+    padding: 10px;
+    background-color: rgb(166, 163, 163);
+    box-shadow: 0px 0px 2px 2px rgb(201, 201, 201);
+    border-radius: 2px;
+}
+
+.logged-in-menu * {
+    margin: 0px 3px 0px;
 }
 
 .form-input {

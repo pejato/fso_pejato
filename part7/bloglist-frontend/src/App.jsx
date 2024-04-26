@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import LoginPage from './components/Login/LoginPage';
 import BlogList from './components/Blog/BlogList';
 import './App.css';
-import LoggedInHeader from './components/Login/LoggedInHeader';
+import LoggedInMenu from './components/Login/LoggedInMenu';
 import Notification from './components/Notification';
 import UserList from './components/User/UserList';
 import UserDetail from './components/User/UserDetail';
@@ -13,8 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 function App() {
   const content = (
     <>
-      <h2>Blogs</h2>
-      <LoggedInHeader />
+      <LoggedInMenu />
 
       <Routes>
         <Route path="/login" element={<LoginPage />} />
