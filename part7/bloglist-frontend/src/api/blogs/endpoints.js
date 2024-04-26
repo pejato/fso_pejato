@@ -3,12 +3,24 @@ import createEndpointsGenerator from '../endpointHelpers';
 const getBasicBlogs = (builder) =>
   builder.query({
     query: () => '/blogs/basic_view',
-    providesTags: ['BasicBlogs'],
+    providesTags: (result) =>
+      result
+        ? [
+            ...result.map(({ id }) => ({ type: 'BasicBlogs', id })),
+            { type: 'BasicBlogs', id: 'LIST' },
+          ]
+        : [{ type: 'BasicBlogs', id: 'LIST' }],
   });
 const getBlogs = (builder) =>
   builder.query({
     query: () => '/blogs',
-    providesTags: ['Blogs'],
+    providesTags: (result) =>
+      result
+        ? [
+            ...result.map(({ id }) => ({ type: 'Blogs', id })),
+            { type: 'Blogs', id: 'LIST' },
+          ]
+        : [{ type: 'Blogs', id: 'LIST' }],
   });
 const getBlog = (builder) =>
   builder.query({
@@ -16,7 +28,7 @@ const getBlog = (builder) =>
       url: `/blogs/${id}`,
       method: 'GET',
     }),
-    providesTags: (result, error, id) => [{ type: 'Blog', id }],
+    providesTags: (result, error, id) => [{ type: 'Blogs', id }],
   });
 
 const createBlog = (builder) =>
@@ -26,7 +38,10 @@ const createBlog = (builder) =>
       method: 'POST',
       body: newBlog,
     }),
-    invalidatesTags: ['BasicBlogs', 'Blogs'],
+    invalidatesTags: [
+      { type: 'BasicBlogs', id: 'LIST' },
+      { type: 'Blogs', id: 'LIST' },
+    ],
   });
 
 const updateBlog = (builder) =>
@@ -37,9 +52,9 @@ const updateBlog = (builder) =>
       body: patchSet,
     }),
     invalidatesTags: (result, error, { id }) => [
-      { type: 'BasicBlogs' },
-      { type: 'Blogs' },
-      { type: 'Blog', id },
+      { type: 'BasicBlogs', id: 'LIST' },
+      { type: 'Blogs', id: 'LIST' },
+      { type: 'Blogs', id },
     ],
   });
 
@@ -50,9 +65,9 @@ const deleteBlog = (builder) =>
       method: 'DELETE',
     }),
     invalidatesTags: (result, error, id) => [
-      { type: 'BasicBlogs' },
-      { type: 'Blogs' },
-      { type: 'Blog', id },
+      { type: 'BasicBlogs', id: 'LIST' },
+      { type: 'Blogs', id: 'LIST' },
+      { type: 'Blogs', id },
     ],
   });
 
