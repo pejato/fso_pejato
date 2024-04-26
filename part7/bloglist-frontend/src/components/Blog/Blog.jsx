@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { showNotification } from '../../reducers/notificationReducer';
 import {
   useDeleteBlogMutation,
+  useGetBlogQuery,
   useUpdateBlogMutation,
 } from '../../api/apiSlice';
 
-function Blog({ currentUser, blog }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const buttonText = isExpanded ? 'Hide' : 'View';
+function Blog() {
   const dispatch = useDispatch();
   const [updateBlog, { isUpdateBlogLoading }] = useUpdateBlogMutation();
   const [deleteBlog, { isDeleteBlogLoading }] = useDeleteBlogMutation();
+
+  const { id } = useParams();
+  const user = useSelector((state) => state.auth);
+  const { data: blog, isLoading: isBlogLoading } = useGetBlogQuery(id);
+
+  if (isBlogLoading) {
+    return null;
+  }
 
   const likeBlog = async () => {
     try {
@@ -40,7 +48,7 @@ function Blog({ currentUser, blog }) {
     }
   };
 
-  const deleteContent = currentUser.id === blog.user.id && (
+  const deleteContent = user.id === blog.user.id && (
     <button
       type="button"
       disabled={isDeleteBlogLoading}
@@ -50,8 +58,11 @@ function Blog({ currentUser, blog }) {
     </button>
   );
 
-  const expandedContent = (
-    <>
+  return (
+    <div className="blog-detail">
+      <h2>
+        <span>{blog.title}</span> by {blog.author}
+      </h2>
       <div>
         <a href={`//${blog.url}`} target="_blank" rel="noreferrer noopener">
           {blog.url}
@@ -65,20 +76,6 @@ function Blog({ currentUser, blog }) {
       </div>
       <div>Uploaded by {blog.user.name}</div>
       {deleteContent}
-    </>
-  );
-
-  return (
-    <div className="blog-entry">
-      <b>{blog.title}</b> by {blog.author}
-      <button
-        className="expand-button"
-        type="button"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        {buttonText}
-      </button>
-      {isExpanded && expandedContent}
     </div>
   );
 }

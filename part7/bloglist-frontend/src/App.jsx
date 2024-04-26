@@ -8,23 +8,24 @@ import LoggedInHeader from './components/Login/LoggedInHeader';
 import Notification from './components/Notification';
 import UserList from './components/User/UserList';
 import UserDetail from './components/User/UserDetail';
+import Blog from './components/Blog/Blog';
 
 function App() {
-  const user = useSelector((state) => {
-    return state.auth;
+  const hasAuthedUser = useSelector((state) => {
+    return state.auth !== null;
   });
 
   const content =
-    user === null ? (
+    hasAuthedUser === null ? (
       <LoginPage />
     ) : (
       <>
         <h2>Blogs</h2>
-        <LoggedInHeader user={user} />
+        <LoggedInHeader />
 
         <Routes>
-          <Route path="/blogs/:id" element={<div>TODO: Blog detail!</div>} />
-          <Route path="/blogs?" element={<BlogList currentUser={user} />} />
+          <Route path="/blogs/:id" element={<Blog />} />
+          <Route path="/blogs?" element={<BlogList />} />
           <Route path="/users/:id" element={<UserDetail />} />
           <Route path="/users" element={<UserList />} />
         </Routes>

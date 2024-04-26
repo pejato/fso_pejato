@@ -1,9 +1,13 @@
 import { React } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../reducers/authReducer';
 
-function LoggedInHeader({ user }) {
+function LoggedInHeader() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth);
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="logged-in-label">

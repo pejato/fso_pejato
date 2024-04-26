@@ -10,12 +10,6 @@
     margin: 10px 0px 10px 0px;
 }
 
-.blog-entry {
-    padding: 4px;
-    margin: 2px 0px 2px 0px;
-    border: 1px solid black;
-}
-
-.blog-entry button {
+.blog-detail button {
     margin: 4px;
 }

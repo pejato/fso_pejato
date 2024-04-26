@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import Blog from './Blog';
+import { Link } from 'react-router-dom';
 import { useGetBlogsQuery } from '../../api/apiSlice';
 import Togglable from '../Togglable';
 import CreateBlogForm from './CreateBlogForm';
 
-function BlogList({ currentUser }) {
+function BlogList() {
   const {
     data: blogs,
     isSuccess,
@@ -37,7 +37,11 @@ function BlogList({ currentUser }) {
       {blogs
         .toSorted((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} currentUser={currentUser} blog={blog} />
+          <Link to={`/blogs/${blog.id}`} key={blog.id}>
+            <div>
+              {blog.title} by {blog.author}
+            </div>
+          </Link>
         ))}
     </div>
   );
