@@ -34,6 +34,13 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Blogs'],
     }),
+    deleteBlog: builder.mutation({
+      query: (id) => ({
+        url: `/blogs/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Blogs'],
+    }),
     login: builder.mutation({
       query: ({ username, password }) => ({
         url: '/login',
@@ -48,5 +55,6 @@ export const {
   useGetBlogsQuery,
   useCreateBlogMutation,
   useUpdateBlogMutation,
+  useDeleteBlogMutation,
   useLoginMutation,
 } = apiSlice;

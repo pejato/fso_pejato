@@ -2,7 +2,7 @@ import React from 'react';
 import Blog from './Blog';
 import { useGetBlogsQuery } from '../api/apiSlice';
 
-function BlogList({ currentUser, onDeleted }) {
+function BlogList({ currentUser }) {
   const {
     data: blogs,
     isSuccess,
@@ -27,12 +27,7 @@ function BlogList({ currentUser, onDeleted }) {
       {blogs
         .toSorted((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            currentUser={currentUser}
-            blog={blog}
-            onDeleted={onDeleted}
-          />
+          <Blog key={blog.id} currentUser={currentUser} blog={blog} />
         ))}
     </div>
   );

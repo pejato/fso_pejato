@@ -29,13 +29,7 @@ function App() {
         <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
           <CreateBlogForm onCreatedBlog={onCreatedBlog} />
         </Togglable>
-        <BlogList
-          currentUser={user}
-          onDeleted={(blog) => {
-            // TODO: Fix delete logic
-            // setBlogs(blogs.filter((b) => b.id !== blog.id))
-          }}
-        />
+        <BlogList currentUser={user} />
       </>
     );
 

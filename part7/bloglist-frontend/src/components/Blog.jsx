@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import blogService from '../services/blogs';
 import { showNotification } from '../reducers/notificationReducer';
-import { useUpdateBlogMutation } from '../api/apiSlice';
+import { useDeleteBlogMutation, useUpdateBlogMutation } from '../api/apiSlice';
 
-function Blog({ currentUser, blog, onDeleted }) {
+function Blog({ currentUser, blog }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const buttonText = isExpanded ? 'Hide' : 'View';
   const dispatch = useDispatch();
-  const [updateBlog, { isLoading }] = useUpdateBlogMutation();
+  const [updateBlog, { isUpdateBlogLoading }] = useUpdateBlogMutation();
+  const [deleteBlog, { isDeleteBlogLoading }] = useDeleteBlogMutation();
 
   const likeBlog = async () => {
     try {
@@ -25,13 +25,12 @@ function Blog({ currentUser, blog, onDeleted }) {
   const onDelete = async () => {
     try {
       if (window.confirm(`Are you sure you want to remove '${blog.title}'?`)) {
-        await blogService.remove(blog);
+        await deleteBlog(blog.id).unwrap();
         dispatch(showNotification(`Removed '${blog.title}'`));
-        onDeleted(blog);
       }
     } catch (error) {
-      if (error?.response?.data?.error) {
-        dispatch(showNotification(error.response.data.error, true));
+      if (error?.data?.error) {
+        dispatch(showNotification(error.data.error, true));
       } else {
         dispatch(showNotification(`Removed '${blog.title}'`, true));
       }
@@ -39,7 +38,11 @@ function Blog({ currentUser, blog, onDeleted }) {
   };
 
   const deleteContent = currentUser.id === blog.user.id && (
-    <button type="button" onClick={() => onDelete(blog)}>
+    <button
+      type="button"
+      disabled={isDeleteBlogLoading}
+      onClick={() => onDelete(blog)}
+    >
       Remove
     </button>
   );
@@ -53,7 +56,7 @@ function Blog({ currentUser, blog, onDeleted }) {
       </div>
       <div>
         Likes {blog.likes}
-        <button type="button" disabled={isLoading} onClick={likeBlog}>
+        <button type="button" disabled={isUpdateBlogLoading} onClick={likeBlog}>
           like
         </button>
       </div>
