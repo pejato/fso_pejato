@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useGetUsersQuery } from '../../api/apiSlice';
 
 function UserList() {
@@ -17,7 +18,9 @@ function UserList() {
         {users.map((u) => {
           return (
             <tr key={u.username}>
-              <td>{u.name}</td>
+              <td>
+                <Link to={`/users/${u.id}`}>{u.name}</Link>
+              </td>
               <td>{u.blogs.length}</td>
             </tr>
           );
