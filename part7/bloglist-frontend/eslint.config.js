@@ -34,6 +34,7 @@ export default [
       'no-shadow': 'off',
       'no-underscore-dangle': 'off',
       'no-param-reassign': 'off',
+      'no-restricted-syntax': 'off',
       'import/no-named-as-default-member': 'off',
       'import/no-named-as-default': 'off',
       'react/button-has-type': 'off',
