@@ -26,10 +26,10 @@ if (process.env.NODE_ENV === 'test') {
   const testRouter = require('./controllers/testing');
   app.use('/api/testing', testRouter);
 }
-app.post('/api/blogs', [tokenExtractor, userExtractor]);
-app.delete('/api/blogs/:id', [tokenExtractor, userExtractor]);
-app.put('/api/blogs/:id', [tokenExtractor, userExtractor]);
-app.patch('/api/blogs/:id', [tokenExtractor, userExtractor]);
+app.post('/api/blogs/*', [tokenExtractor, userExtractor]);
+app.delete('/api/blogs/*', [tokenExtractor, userExtractor]);
+app.put('/api/blogs/*', [tokenExtractor, userExtractor]);
+app.patch('/api/blogs/*', [tokenExtractor, userExtractor]);
 
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);

@@ -1,8 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
+const { dontSerializeMongoPrivateFields } = require('./modelsUtils');
 
 const blogSchema = new mongoose.Schema({
+  id: String,
   title: {
     type: String,
     required: true,
@@ -16,20 +18,19 @@ const blogSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  id: String,
+  comments: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Comment',
+    },
+  ],
   user: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'User',
   },
 });
 
-blogSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-});
+dontSerializeMongoPrivateFields(blogSchema);
 
 const Blog = mongoose.model('Blog', blogSchema);
 

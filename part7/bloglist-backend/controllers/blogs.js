@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Blog = require('../models/blog');
+const Comment = require('../models/comment');
 
 const userPopConfig = { username: 1, name: 1 };
 
@@ -23,6 +24,11 @@ router.get('/:id', async (request, response) => {
   response.json(blog);
 });
 
+router.get('/:id/comments', async (request, response) => {
+  const comments = await Comment.find({ blog: request.params.id });
+  response.json(comments);
+});
+
 // MARK: - POST
 
 router.post('/', async (request, response) => {
@@ -42,6 +48,13 @@ router.post('/', async (request, response) => {
   return response
     .status(201)
     .json(await savedBlog.populate('user', userPopConfig));
+});
+
+router.post('/comments', async (request, response) => {
+  const { text, blog } = request.body;
+  const comment = new Comment({ text, blog });
+  await comment.save();
+  response.status(201).json(comment);
 });
 
 // MARK: - DELETE

@@ -26,6 +26,7 @@ export default [
     rules: {
       'no-restricted-syntax': 'off',
       'no-underscore-dangle': 'off',
+      'no-param-reassign': 'off',
     }
   }
 ];
