@@ -36,5 +36,6 @@ export const {
   useUpdateBlogMutation,
   useDeleteBlogMutation,
   useGetUsersQuery,
+  useGetUserQuery,
   useLoginMutation,
 } = apiSlice;

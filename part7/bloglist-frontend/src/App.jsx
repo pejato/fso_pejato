@@ -7,6 +7,7 @@ import './App.css';
 import LoggedInHeader from './components/Login/LoggedInHeader';
 import Notification from './components/Notification';
 import UserList from './components/User/UserList';
+import UserDetail from './components/User/UserDetail';
 
 function App() {
   const user = useSelector((state) => {
@@ -24,7 +25,7 @@ function App() {
         <Routes>
           <Route path="/blogs/:id" element={<div>TODO: Blog detail!</div>} />
           <Route path="/blogs?" element={<BlogList currentUser={user} />} />
-          <Route path="/users/:id" element={<div>TODO: User detail!</div>} />
+          <Route path="/users/:id" element={<UserDetail />} />
           <Route path="/users" element={<UserList />} />
         </Routes>
       </>
