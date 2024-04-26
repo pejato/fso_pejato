@@ -1,12 +1,12 @@
 import { React } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import BlogList from './components/BlogList';
+import LoginPage from './components/Login/LoginPage';
+import BlogList from './components/Blog/BlogList';
 import './App.css';
-import LoggedInHeader from './components/LoggedInHeader';
+import LoggedInHeader from './components/Login/LoggedInHeader';
 import Notification from './components/Notification';
-import UserList from './components/UserList';
+import UserList from './components/User/UserList';
 
 function App() {
   const user = useSelector((state) => {

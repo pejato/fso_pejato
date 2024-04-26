@@ -1,4 +1,4 @@
-import { useGetUsersQuery } from '../api/apiSlice';
+import { useGetUsersQuery } from '../../api/apiSlice';
 
 function UserList() {
   const { data: users, isLoading } = useGetUsersQuery();

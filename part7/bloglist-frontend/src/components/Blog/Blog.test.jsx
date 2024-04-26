@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { describe, test, expect } from 'vitest';
 import Blog from './Blog';
-import { renderWithProviders } from '../../testSetup';
+import { renderWithProviders } from '../../../testSetup';
 
 describe('Blog', () => {
   test('renders only title and author when not expanded', async () => {

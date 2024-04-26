@@ -5,8 +5,8 @@ import React from 'react';
 import { expect, describe, test, vi, beforeAll } from 'vitest';
 import { HttpResponse, http } from 'msw';
 import CreateBlogForm from './CreateBlogForm';
-import { renderWithProviders, server } from '../../testSetup';
-import store from '../store';
+import { renderWithProviders, server } from '../../../testSetup';
+import store from '../../store';
 
 describe('CreateBlogForm', () => {
   beforeAll(() => {

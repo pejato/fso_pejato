@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import Blog from './Blog';
-import { useGetBlogsQuery } from '../api/apiSlice';
-import Togglable from './Togglable';
+import { useGetBlogsQuery } from '../../api/apiSlice';
+import Togglable from '../Togglable';
 import CreateBlogForm from './CreateBlogForm';
 
 function BlogList({ currentUser }) {

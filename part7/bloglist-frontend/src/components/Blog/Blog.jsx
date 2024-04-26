@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { showNotification } from '../reducers/notificationReducer';
-import { useDeleteBlogMutation, useUpdateBlogMutation } from '../api/apiSlice';
+import { showNotification } from '../../reducers/notificationReducer';
+import {
+  useDeleteBlogMutation,
+  useUpdateBlogMutation,
+} from '../../api/apiSlice';
 
 function Blog({ currentUser, blog }) {
   const [isExpanded, setIsExpanded] = useState(false);

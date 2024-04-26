@@ -1,6 +1,6 @@
 import { React } from 'react';
 import { useDispatch } from 'react-redux';
-import { logout } from '../reducers/authReducer';
+import { logout } from '../../reducers/authReducer';
 
 function LoggedInHeader({ user }) {
   const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLoginMutation } from '../api/apiSlice';
-import { showNotification } from '../reducers/notificationReducer';
+import { useLoginMutation } from '../../api/apiSlice';
+import { showNotification } from '../../reducers/notificationReducer';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
