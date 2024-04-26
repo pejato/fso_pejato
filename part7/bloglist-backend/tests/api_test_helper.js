@@ -53,7 +53,7 @@ const blogsInDb = async () => {
 };
 
 const usersInDb = async () => {
-  const users = await User.find({}).populate('blog', { user: 0 });
+  const users = await User.find({}).populate('blogs', { user: 0 });
   return users.map((u) => u.toJSON());
 };
 

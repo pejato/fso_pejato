@@ -31,6 +31,15 @@ describe('users controller', async () => {
     assert.strictEqual(users.length, 2);
   });
 
+  test('can fetch specific user', async () => {
+    const users = await testHelper.usersInDb();
+    const response = await app
+      .get(`/api/users/${users[0].id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    assert.deepStrictEqual(response.body, users[0]);
+  });
+
   describe('when creating users', async () => {
     test('can create user with username & password if they are at least three characters', async () => {
       const user = {
