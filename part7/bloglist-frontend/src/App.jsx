@@ -8,6 +8,7 @@ import Notification from './components/Notification';
 import UserList from './components/User/UserList';
 import UserDetail from './components/User/UserDetail';
 import Blog from './components/Blog/Blog';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const content = (
@@ -17,10 +18,12 @@ function App() {
 
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/blogs/:id" element={<Blog />} />
-        <Route path="/blogs?" element={<BlogList />} />
-        <Route path="/users/:id" element={<UserDetail />} />
-        <Route path="/users" element={<UserList />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/blogs/:id" element={<Blog />} />
+          <Route path="/blogs?" element={<BlogList />} />
+          <Route path="/users/:id" element={<UserDetail />} />
+          <Route path="/users" element={<UserList />} />
+        </Route>
       </Routes>
     </>
   );
@@ -32,5 +35,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

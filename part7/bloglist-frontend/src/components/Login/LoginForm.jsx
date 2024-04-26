@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../api/apiSlice';
 import { showNotification } from '../../reducers/notificationReducer';
 
@@ -8,12 +9,14 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     // TODO: Use middleware to handle errors
     try {
       await login({ username, password }).unwrap();
+      navigate('/');
     } catch (error) {
       dispatch(
         showNotification(error.data?.error ?? 'Something went wrong', true),
