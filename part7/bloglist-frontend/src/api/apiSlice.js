@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import createBlogEndpoints from './blogs/endpoints';
+import createUserEndpoints from './users/endpoints';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: new URL('/api', window.location.origin).href,
@@ -16,6 +17,7 @@ export const apiSlice = createApi({
   baseQuery,
   endpoints: (builder) => ({
     ...createBlogEndpoints(builder),
+    ...createUserEndpoints(builder),
     login: builder.mutation({
       query: ({ username, password }) => ({
         url: '/login',
@@ -33,5 +35,6 @@ export const {
   useCreateBlogMutation,
   useUpdateBlogMutation,
   useDeleteBlogMutation,
+  useGetUsersQuery,
   useLoginMutation,
 } = apiSlice;

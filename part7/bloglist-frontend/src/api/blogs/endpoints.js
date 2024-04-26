@@ -1,3 +1,5 @@
+import createEndpointsGenerator from '../endpointHelpers';
+
 const getBasicBlogs = (builder) =>
   builder.query({
     query: () => '/blogs/basic_view',
@@ -54,19 +56,11 @@ const deleteBlog = (builder) =>
     ],
   });
 
-function createEndpoints(builder) {
-  const endpoints = {
-    getBasicBlogs,
-    getBlogs,
-    getBlog,
-    createBlog,
-    updateBlog,
-    deleteBlog,
-  };
-  for (const [key, fn] of Object.entries(endpoints)) {
-    endpoints[key] = fn(builder);
-  }
-  return endpoints;
-}
-
-export default createEndpoints;
+export default createEndpointsGenerator({
+  getBasicBlogs,
+  getBlogs,
+  getBlog,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+});
