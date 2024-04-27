@@ -79,6 +79,18 @@ const getBlogComments = (builder) =>
     ],
   });
 
+const createBlogComment = (builder) =>
+  builder.mutation({
+    query: ({ blogId, comment }) => ({
+      url: `/blogs/${blogId}/comments`,
+      method: 'POST',
+      body: { text: comment },
+    }),
+    invalidatesTags: (result, error, { blogId }) => [
+      { type: 'BlogComments', id: blogId },
+    ],
+  });
+
 export default createEndpointsGenerator({
   getBasicBlogs,
   getBlogs,
@@ -87,4 +99,5 @@ export default createEndpointsGenerator({
   updateBlog,
   deleteBlog,
   getBlogComments,
+  createBlogComment,
 });

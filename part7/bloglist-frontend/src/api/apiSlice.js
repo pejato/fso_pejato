@@ -33,6 +33,7 @@ export const {
   useGetBlogsQuery,
   useGetBlogQuery,
   useGetBlogCommentsQuery,
+  useCreateBlogCommentMutation,
   useCreateBlogMutation,
   useUpdateBlogMutation,
   useDeleteBlogMutation,
