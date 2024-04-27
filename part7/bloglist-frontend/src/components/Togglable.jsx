@@ -1,5 +1,4 @@
 import { React, useState, forwardRef, useImperativeHandle } from 'react';
-import '../App.css';
 
 const Togglable = forwardRef(({ buttonLabel, children }, ref) => {
   const [visible, setVisible] = useState(false);
@@ -19,11 +18,15 @@ const Togglable = forwardRef(({ buttonLabel, children }, ref) => {
   return (
     <div className="toggle">
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{buttonLabel}</button>
+        <button className="blue-button" onClick={toggleVisibility}>
+          {buttonLabel}
+        </button>
       </div>
       <div style={showWhenVisible}>
         {children}
-        <button onClick={toggleVisibility}>Cancel</button>
+        <button className="blue-button" onClick={toggleVisibility}>
+          Cancel
+        </button>
       </div>
     </div>
   );

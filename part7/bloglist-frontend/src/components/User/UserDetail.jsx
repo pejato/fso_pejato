@@ -12,16 +12,18 @@ function UserDetail() {
     user.blogs.length === 0 ? (
       <div>Nothing here :&#40;</div>
     ) : (
-      <ul>
+      <ul className="list-disc">
         {user.blogs.map((b) => (
-          <li key={b.id}>{b.title}</li>
+          <li key={b.id} className="ml-4">
+            {b.title}
+          </li>
         ))}
       </ul>
     );
   return (
-    <div>
-      <h2>{user.name}</h2>
-      <h3>Created blogs</h3>
+    <div className="m-4">
+      <h2 className="font-bold">{user.name}</h2>
+      <h3 className="font-bold">Created blogs</h3>
       {createdBlogsContent}
     </div>
   );

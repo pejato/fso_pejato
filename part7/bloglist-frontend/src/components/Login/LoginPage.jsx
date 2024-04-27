@@ -3,8 +3,8 @@ import LoginForm from './LoginForm';
 
 function LoginPage() {
   return (
-    <div>
-      <h2>Log in to Application</h2>
+    <div className="m-4">
+      <h2 className="font-extrabold">Log in to Application</h2>
       <LoginForm />
     </div>
   );

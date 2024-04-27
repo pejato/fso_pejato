@@ -25,8 +25,8 @@ function LoginForm() {
   };
   return (
     <form onSubmit={onSubmit}>
-      <div>
-        Username
+      <div className="space-x-2">
+        <span>Username</span>
         <input
           className="form-input"
           type="text"
@@ -35,8 +35,8 @@ function LoginForm() {
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
-      <div>
-        Password
+      <div className="space-x-2">
+        <span>Password</span>
         <input
           className="form-input"
           type="password"
@@ -45,7 +45,7 @@ function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button type="submit" disabled={isLoading}>
+      <button className="blue-button mt-1" type="submit" disabled={isLoading}>
         Login
       </button>
     </form>

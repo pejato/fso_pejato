@@ -63,7 +63,12 @@ function CreateBlogForm({ onCreatedBlog }) {
           onChange={(e) => dispatch(setUrl(e.target.value))}
         />
       </div>
-      <button type="submit" onClick={onSubmit} disabled={isLoading}>
+      <button
+        className="blue-button"
+        type="submit"
+        onClick={onSubmit}
+        disabled={isLoading}
+      >
         Create
       </button>
     </form>

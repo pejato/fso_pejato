@@ -25,7 +25,7 @@ export default function BlogComments({ blogId }) {
   };
 
   const createCommentContent = isLoading ? null : (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="space-x-1.5">
       <input
         value={commentText}
         name="comment"
@@ -33,7 +33,11 @@ export default function BlogComments({ blogId }) {
         type="text"
         onChange={(e) => setCommentText(e.target.value)}
       />
-      <button disabled={!commentText || isCreatingComment} type="submit">
+      <button
+        className="blue-button"
+        disabled={!commentText || isCreatingComment}
+        type="submit"
+      >
         Create comment
       </button>
     </form>

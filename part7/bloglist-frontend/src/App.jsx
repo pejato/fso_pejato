@@ -2,7 +2,6 @@ import { React } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import LoginPage from './components/Login/LoginPage';
 import BlogList from './components/Blog/BlogList';
-import './App.css';
 import LoggedInMenu from './components/Login/LoggedInMenu';
 import Notification from './components/Notification';
 import UserList from './components/User/UserList';
@@ -14,7 +13,6 @@ function App() {
   const content = (
     <>
       <LoggedInMenu />
-
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>

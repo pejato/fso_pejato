@@ -11,7 +11,7 @@ function UserList() {
       <thead>
         <tr>
           <th scope="col" aria-label="users" />
-          <th scope="col">blogs created</th>
+          <th scope="col">Blogs created</th>
         </tr>
       </thead>
       <tbody>
@@ -19,7 +19,9 @@ function UserList() {
           return (
             <tr key={u.username}>
               <td>
-                <Link to={`/users/${u.id}`}>{u.name}</Link>
+                <Link className="menu-link" to={`/users/${u.id}`}>
+                  {u.name}
+                </Link>
               </td>
               <td>{u.blogs.length}</td>
             </tr>
@@ -29,8 +31,8 @@ function UserList() {
     </table>
   );
   return (
-    <div>
-      <h2>Users</h2>
+    <div className="m-4">
+      <h2 className="font-bold">Users</h2>
       {userContent}
     </div>
   );

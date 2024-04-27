@@ -60,7 +60,7 @@ function BlogDetail() {
   );
 
   return (
-    <div className="blog-detail">
+    <div className="blog-detail m-4">
       <h2>
         <span>{blog.title}</span> by {blog.author}
       </h2>
@@ -69,9 +69,14 @@ function BlogDetail() {
           {blog.url}
         </a>
       </div>
-      <div>
-        Likes {blog.likes}
-        <button type="button" disabled={isUpdateBlogLoading} onClick={likeBlog}>
+      <div className="space-x-1.5">
+        <span>Likes {blog.likes}</span>
+        <button
+          className="blue-button"
+          type="button"
+          disabled={isUpdateBlogLoading}
+          onClick={likeBlog}
+        >
           like
         </button>
       </div>

@@ -29,20 +29,25 @@ function BlogList() {
   }
 
   return (
-    <div>
+    <div className="m-4">
       <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
         <CreateBlogForm onCreatedBlog={onCreatedBlog} />
       </Togglable>
-      <h2>Created Blogs</h2>
-      {blogs
-        .toSorted((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Link to={`/blogs/${blog.id}`} key={blog.id}>
-            <div>
-              {blog.title} by {blog.author}
-            </div>
-          </Link>
-        ))}
+      <h2 className="font-bold">Created Blogs</h2>
+      <ul className="list-disc">
+        {blogs
+          .toSorted((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <li key={blog.id} className="ml-4">
+              <Link
+                to={`/blogs/${blog.id}`}
+                className="font-medium text-blue-500 dark:text-blue-700 hover:underline"
+              >
+                {blog.title} by {blog.author}
+              </Link>
+            </li>
+          ))}
+      </ul>
     </div>
   );
 }

@@ -11,19 +11,26 @@ function LoggedInHeader() {
   }
 
   return (
-    <div className="logged-in-menu">
-      <Link to="/blogs">Blogs</Link>
-      <Link to="/users">Users</Link>
-      <span>Logged in as {user.name}</span>
+    <div className="p-2 mb-5 bg-stone-300 space-x-2">
+      <Link to="/blogs" className="menu-link">
+        Blogs
+      </Link>
+      <Link to="/users" className="menu-link pr-4">
+        Users
+      </Link>
 
-      <button
-        type="button"
-        onClick={() => {
-          dispatch(logout());
-        }}
-      >
-        Log out
-      </button>
+      <div className="float-right space-x-2">
+        <button
+          className="menu-link"
+          type="button"
+          onClick={() => {
+            dispatch(logout());
+          }}
+        >
+          Log out
+        </button>
+        <span>Logged in as {user.name}</span>
+      </div>
     </div>
   );
 }
