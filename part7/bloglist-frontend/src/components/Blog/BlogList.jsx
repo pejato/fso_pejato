@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useGetBlogsQuery } from '../../api/apiSlice';
+import { useGetBasicBlogsQuery } from '../../api/apiSlice';
 import Togglable from '../Togglable';
 import CreateBlogForm from './CreateBlogForm';
 
@@ -11,7 +11,7 @@ function BlogList() {
     isError,
     error,
     isLoading,
-  } = useGetBlogsQuery();
+  } = useGetBasicBlogsQuery();
 
   const blogFormRef = useRef();
   const onCreatedBlog = () => {
