@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { describe, test, expect } from 'vitest';
-import Blog from './Blog';
+import BlogDetail from './BlogDetail';
 import { renderWithProviders } from '../../../testSetup';
 
 describe('Blog', () => {
@@ -19,7 +19,7 @@ describe('Blog', () => {
       },
     };
     renderWithProviders(
-      <Blog
+      <BlogDetail
         currentUser={blog.user}
         blog={blog}
         onLike={() => {}}
@@ -45,7 +45,7 @@ describe('Blog', () => {
       },
     };
     const { container } = renderWithProviders(
-      <Blog
+      <BlogDetail
         currentUser={blog.user}
         blog={blog}
         onLike={() => {}}

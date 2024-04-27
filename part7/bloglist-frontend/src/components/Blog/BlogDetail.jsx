@@ -9,7 +9,7 @@ import {
 } from '../../api/apiSlice';
 import BlogComments from './BlogComments';
 
-function Blog() {
+function BlogDetail() {
   const dispatch = useDispatch();
   const [updateBlog, { isUpdateBlogLoading }] = useUpdateBlogMutation();
   const [deleteBlog, { isDeleteBlogLoading }] = useDeleteBlogMutation();
@@ -82,4 +82,4 @@ function Blog() {
   );
 }
 
-export default Blog;
+export default BlogDetail;
