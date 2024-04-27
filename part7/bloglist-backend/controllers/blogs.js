@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { default: mongoose } = require('mongoose');
 const Blog = require('../models/blog');
 const Comment = require('../models/comment');
 
@@ -25,8 +26,11 @@ router.get('/:id', async (request, response) => {
 });
 
 router.get('/:id/comments', async (request, response) => {
-  const comments = await Comment.find({ blog: request.params.id });
-  response.json(comments);
+  const blog = await Blog.findById(request.params.id).populate('comments', {
+    text: 1,
+    id: 1,
+  });
+  response.json(blog.comments);
 });
 
 // MARK: - POST
@@ -50,11 +54,20 @@ router.post('/', async (request, response) => {
     .json(await savedBlog.populate('user', userPopConfig));
 });
 
-router.post('/comments', async (request, response) => {
-  const { text, blog } = request.body;
-  const comment = new Comment({ text, blog });
-  await comment.save();
-  response.status(201).json(comment);
+router.post('/:id/comments', async (request, response) => {
+  const relatedBlog = await Blog.findById(request.params.id);
+  if (!relatedBlog) {
+    return response.status(400).json({ error: 'Invalid blog id' });
+  }
+  const { text } = request.body;
+  const comment = new Comment({ text, blog: request.params.id });
+  relatedBlog.comments = relatedBlog.comments.concat(comment);
+
+  await mongoose.connection.transaction(async (session) => {
+    await comment.save({ session });
+    await relatedBlog.save({ session });
+  });
+  return response.status(201).json(comment);
 });
 
 // MARK: - DELETE

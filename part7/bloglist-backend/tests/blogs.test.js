@@ -6,6 +6,7 @@ const app = require('../app');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 const testHelper = require('./api_test_helper');
+const Comment = require('../models/comment');
 
 const api = supertest(app);
 
@@ -206,15 +207,76 @@ describe('when there are blogs in the database', () => {
     });
   });
 
+  describe('blog comments', () => {
+    test('can be fetched by blog id', async () => {
+      const blogId = testHelper.initialComments[0].blog.toString();
+      const response = await api
+        .get(`/api/blogs/${blogId}/comments`)
+        .set('Authorization', testHelper.testAuthValue)
+        .expect(200);
+      const comments = response.body;
+      assert.strictEqual(comments.length, 1);
+      assert.strictEqual(comments[0].text, 'wolf');
+    });
+
+    test('can be created', async () => {
+      const blogId = testHelper.initialBlogs[1]._id.toString();
+      const newComment = {
+        text: 'get lost!',
+      };
+      const response = await api
+        .post(`/api/blogs/${blogId}/comments`)
+        .set('Authorization', testHelper.testAuthValue)
+        .send(newComment)
+        .expect(201);
+
+      const comment = response.body;
+      assert.strictEqual(comment.text, 'get lost!');
+    });
+
+    test('are associated with blogs on creation', async () => {
+      const blogId = testHelper.initialBlogs[1]._id.toString();
+      const newComment = {
+        text: 'see ya!',
+      };
+      const response = await api
+        .post(`/api/blogs/${blogId}/comments`)
+        .set('Authorization', testHelper.testAuthValue)
+        .send(newComment)
+        .expect(201);
+
+      const dbComments = await testHelper.commentsInDb();
+      const dbBlogs = await testHelper.blogsInDb();
+
+      const dbBlog = dbBlogs.find((b) => b.id === blogId);
+      assert.notStrictEqual(dbBlog, null);
+
+      const newBlogComment = dbBlog.comments.find(
+        (c) => c.id === response.body.id,
+      );
+      assert.notStrictEqual(newBlogComment, null);
+
+      const newDbComment = dbComments.find((c) => c.id === response.body.id);
+      assert.deepStrictEqual(
+        { text: newDbComment.text, id: newDbComment.id },
+        newBlogComment,
+      );
+      assert.strictEqual(newDbComment.blog.id, dbBlog.id);
+    });
+  });
+
   // MARK: - Setup & Teardown
 
   beforeEach(async () => {
     await Blog.deleteMany({});
     await User.deleteMany({});
+    await Comment.deleteMany({});
     const blogs = testHelper.initialBlogs.map((b) => new Blog(b));
     const users = testHelper.initialUsers.map((u) => new User(u));
+    const comments = testHelper.initialComments.map((c) => new Comment(c));
     await Promise.all(blogs.map((b) => b.save()));
     await Promise.all(users.map((u) => u.save()));
+    await Promise.all(comments.map((c) => c.save()));
   });
 
   after(async () => {

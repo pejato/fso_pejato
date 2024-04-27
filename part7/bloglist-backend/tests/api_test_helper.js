@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Blog = require('../models/blog');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 
 const initialBlogs = [
   {
@@ -10,6 +11,13 @@ const initialBlogs = [
     likes: 5000,
     _id: new mongoose.Types.ObjectId('66202853e89206cbd9cfe577'),
     user: new mongoose.Types.ObjectId('66202853e89206cbd9cfe579'),
+    comments: [
+      {
+        _id: new mongoose.Types.ObjectId('67202853e89206cbd9cfe580'),
+        text: 'wolf',
+        blog: new mongoose.Types.ObjectId('66202853e89206cbd9cfe577'),
+      },
+    ],
   },
   {
     title: 'CSS is hard',
@@ -18,6 +26,7 @@ const initialBlogs = [
     likes: 9001,
     _id: new mongoose.Types.ObjectId('66202853e89206cbd9cfe578'),
     user: new mongoose.Types.ObjectId('66202853e89206cbd9cfe579'),
+    comments: [],
   },
 ];
 
@@ -38,6 +47,10 @@ const initialUsers = [
   },
 ];
 
+const initialComments = initialBlogs.reduce((comments, blog) => {
+  return comments.concat(blog.comments);
+}, []);
+
 const nonExistingId = async () => {
   const note = new Blog({ content: 'willremovethissoon' });
   await note.save();
@@ -48,7 +61,9 @@ const nonExistingId = async () => {
 };
 
 const blogsInDb = async () => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { text: 1 });
   return blogs.map((blog) => blog.toJSON());
 };
 
@@ -57,11 +72,18 @@ const usersInDb = async () => {
   return users.map((u) => u.toJSON());
 };
 
+const commentsInDb = async () => {
+  const comments = await Comment.find({}).populate('blog', { comments: 0 });
+  return comments.map((c) => c.toJSON());
+};
+
 module.exports = {
   initialBlogs,
   initialUsers,
+  initialComments,
   nonExistingId,
   blogsInDb,
   usersInDb,
+  commentsInDb,
   testAuthValue,
 };
