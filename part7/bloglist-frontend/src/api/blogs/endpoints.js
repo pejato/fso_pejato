@@ -71,6 +71,14 @@ const deleteBlog = (builder) =>
     ],
   });
 
+const getBlogComments = (builder) =>
+  builder.query({
+    query: (blogId) => `/blogs/${blogId}/comments`,
+    providesTags: (result, error, blogId) => [
+      { type: 'BlogComments', id: blogId },
+    ],
+  });
+
 export default createEndpointsGenerator({
   getBasicBlogs,
   getBlogs,
@@ -78,4 +86,5 @@ export default createEndpointsGenerator({
   createBlog,
   updateBlog,
   deleteBlog,
+  getBlogComments,
 });

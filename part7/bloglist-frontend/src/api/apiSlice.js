@@ -32,6 +32,7 @@ export const {
   useGetBasicBlogsQuery,
   useGetBlogsQuery,
   useGetBlogQuery,
+  useGetBlogCommentsQuery,
   useCreateBlogMutation,
   useUpdateBlogMutation,
   useDeleteBlogMutation,

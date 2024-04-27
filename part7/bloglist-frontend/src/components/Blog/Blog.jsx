@@ -7,6 +7,7 @@ import {
   useGetBlogQuery,
   useUpdateBlogMutation,
 } from '../../api/apiSlice';
+import BlogComments from './BlogComments';
 
 function Blog() {
   const dispatch = useDispatch();
@@ -76,6 +77,7 @@ function Blog() {
       </div>
       <div>Uploaded by {blog.user.name}</div>
       {deleteContent}
+      <BlogComments blogId={blog.id} />
     </div>
   );
 }
