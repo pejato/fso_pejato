@@ -12,7 +12,7 @@ interface BmiQuery {
   weight: string;
 }
 
-app.get<{}, {}, {}, BmiQuery>('/bmi', (req, res) => {
+app.get<unknown, unknown, unknown, BmiQuery>('/bmi', (req, res) => {
   const { height, weight } = req.query;
 
   if (!height) {

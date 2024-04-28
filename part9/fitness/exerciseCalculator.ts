@@ -1,5 +1,3 @@
-import { parseNumericArguments } from './utils/userInput';
-
 interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
@@ -45,15 +43,3 @@ export const calculateExercises = (
     average,
   };
 };
-
-try {
-  const [target, ...exerciseHours] = parseNumericArguments(process.argv, 1);
-  const exerciseResult = calculateExercises(exerciseHours, target);
-  console.log(exerciseResult);
-} catch (error) {
-  let message = 'Something bad happened...';
-  if (error instanceof Error) {
-    message += ' ' + error.message;
-  }
-  console.log(message);
-}
