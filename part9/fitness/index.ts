@@ -1,7 +1,10 @@
-import express from 'express';
+import express, { json } from 'express';
 import { calculateBmi } from './bmiCalculator';
+import { calculateExercises } from './exerciseCalculator';
 
 const app = express();
+
+app.use(json());
 
 app.get('/hello', (_req, res) => {
   res.send('Hello Full Stack!');
@@ -15,31 +18,39 @@ interface BmiQuery {
 app.get<unknown, unknown, unknown, BmiQuery>('/bmi', (req, res) => {
   const { height, weight } = req.query;
 
-  if (!height) {
-    return res
-      .status(400)
-      .json({ error: 'Must include height query parameter' });
-  }
-  if (!weight) {
-    return res
-      .status(400)
-      .json({ error: 'Must include weight query parameter' });
+  if (height === undefined || weight === undefined) {
+    return res.status(400).json({ error: 'parameters missing' });
   }
   const heightNumber = parseInt(height);
-  if (isNaN(heightNumber)) {
-    return res
-      .status(400)
-      .json({ error: 'height query parameter must be a number' });
-  }
   const weightNumber = parseInt(weight);
-  if (isNaN(weightNumber)) {
-    return res
-      .status(400)
-      .json({ error: 'weight query parameter must be a number' });
+  if (isNaN(heightNumber) || isNaN(weightNumber)) {
+    return res.status(400).json({ error: 'malformatted parameters' });
   }
 
   const message = calculateBmi(heightNumber, weightNumber);
   return res.json({ height, weight, bmi: message });
+});
+
+interface ExercisesResBody {
+  daily_exercises: number[];
+  target: number;
+}
+
+app.post<unknown, unknown, ExercisesResBody>('/exercises', (req, res) => {
+  const { daily_exercises: dailyExercises, target } = req.body;
+  if (dailyExercises === undefined || target === undefined) {
+    return res.status(400).json({ error: 'parameters missing' });
+  }
+
+  if (
+    !Array.isArray(dailyExercises) ||
+    !dailyExercises.some((e) => typeof e !== 'string') ||
+    typeof target !== 'number'
+  ) {
+    return res.status(400).json({ error: 'malformatted parameters' });
+  }
+
+  return res.json(calculateExercises(dailyExercises, target));
 });
 
 const PORT = 3003;
