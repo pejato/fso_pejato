@@ -1,5 +1,6 @@
+import { parseNumericArguments } from './utils/userInput';
+
 type centimeters = number;
-type meters = number;
 type kilograms = number;
 
 const calculateBmi = (height: centimeters, weight: kilograms): string => {
@@ -27,4 +28,14 @@ const calculateBmi = (height: centimeters, weight: kilograms): string => {
   return bmiMessage;
 };
 
-console.log(calculateBmi(180, 74));
+try {
+  const [height, weight] = parseNumericArguments(process.argv, 2, 2);
+  const bmiMessage = calculateBmi(height, weight);
+  console.log(bmiMessage);
+} catch (error) {
+  let message = 'Something bad happened...';
+  if (error instanceof Error) {
+    message += ' ' + error.message;
+  }
+  console.log(message);
+}
